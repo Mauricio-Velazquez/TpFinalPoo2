@@ -1,6 +1,6 @@
-package ar.edu.unq.poo2.tpFinal;
+package containers;
 
-public class Container {
+public abstract class Container {
 	private String tipo; //posible state
 	private double ancho;
 	private double largo;
@@ -55,5 +55,4 @@ public class Container {
 	public void setPesoTotal(double pesoTotal) {
 		this.pesoTotal = pesoTotal;
 	}
-
 }
