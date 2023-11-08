@@ -1,7 +1,7 @@
 package containers;
 
 public abstract class Container {
-	private String tipo; //posible state
+	private String tipo; 
 	private double ancho;
 	private double largo;
 	private double altura;
