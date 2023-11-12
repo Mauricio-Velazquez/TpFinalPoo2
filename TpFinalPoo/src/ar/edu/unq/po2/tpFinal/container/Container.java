@@ -1,27 +1,26 @@
-package containers;
+package ar.edu.unq.po2.tpFinal.container;
 
 public abstract class Container {
-	private String tipo; 
+	private int id; 
 	private double ancho;
 	private double largo;
 	private double altura;
 	private double pesoTotal;
 
-	// Constructor
-	public Container(String tipo, double ancho, double largo, double altura, double pesoTotal) {
-		this.tipo = tipo;
+	public Container(int id, double ancho, double largo, double altura, double pesoTotal) {
+		this.id = id;
 	    this.ancho = ancho;
 	    this.largo = largo;
 	    this.altura = altura;
 	    this.pesoTotal = pesoTotal;
 	}
 
-	public String getTipo() {
-		return tipo;
+	public int getId() {
+		return id;
 	}
 
-	public void setTipo(String tipo) {
-		this.tipo = tipo;
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public double getAncho() {
