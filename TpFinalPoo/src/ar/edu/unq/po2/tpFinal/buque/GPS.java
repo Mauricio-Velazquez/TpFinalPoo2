@@ -1,4 +1,6 @@
 package ar.edu.unq.po2.tpFinal.buque;
+
+
 public class GPS {
 	private Posicion posicionActual;
 
@@ -14,6 +16,9 @@ public class GPS {
     public void actualizarPosicion(Posicion nuevaPosicion) {
         this.posicionActual = nuevaPosicion;
     }
+    
+    
+
 
  // Método que calcula la distancia entre dos ubicaciones
     public double calcularDistancia(Posicion ubicacion1, Posicion ubicacion2) {
