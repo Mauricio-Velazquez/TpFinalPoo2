@@ -1,11 +1,13 @@
 package ar.edu.unq.po2.tpFinal.terminalGestionada;
 import ar.edu.unq.po2.tpFinal.buque.GPS;
 import ar.edu.unq.po2.tpFinal.buque.Posicion;
+import ar.edu.unq.po2.tpFinal.filtro.Filtro;
 import ar.edu.unq.po2.tpFinal.naviera.Circuito;
 import ar.edu.unq.po2.tpFinal.naviera.Naviera;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class TerminalGestionada {
 	private String nombre;
@@ -46,4 +48,11 @@ public class TerminalGestionada {
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
+    
+    public List<Circuito> buscarRutas(Filtro filtro) {
+        return circuitosMaritimos.stream()
+                .filter(filtro::cumpleFiltro)
+                .collect(Collectors.toList());
+    }
+    
 }

@@ -9,8 +9,7 @@ public class FaseDeBuqueWorking implements FaseDeBuque{
 
 	@Override
 	public boolean deberiaCambiar(Buque buque,Posicion ubicacionTerminal ) {
-	    double distancia = buque.calcularDistanciaATerminal();
-		return false;
+		return true;
 	}
 	
 	@Override
