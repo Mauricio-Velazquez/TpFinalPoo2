@@ -13,6 +13,6 @@ public class FiltroFechaDeSalida implements Filtro {
 
     @Override
     public boolean cumpleFiltro(Viaje viaje) {
-    	 return viaje.getFechaInicio()== fechaInicio;
+    	 return viaje.getFechaInicio().isEqual(fechaInicio);
     }
 }

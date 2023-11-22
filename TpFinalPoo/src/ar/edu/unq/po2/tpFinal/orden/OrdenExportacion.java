@@ -19,14 +19,7 @@ public class OrdenExportacion extends Orden {
 		super(container, buque, camion, chofer, fechaSalida, fechaLlegada, nroOrden, cliente, horaLLegada, horaSalida, sericio);
 		// TODO Auto-generated constructor stub
 	}
-	
-	
-	public List<Circuito> determinarAlternativasEnvio() {
-		FiltroPuertoDestino filtroPuertoDestino = new FiltroPuertoDestino("terminalDestino");
-        
-        return terminalGestionada.buscarRutas(filtro);
-    }
-	
+
 	@Override
 	public void realizarOperacion() {
 		// TODO Auto-generated method stub
@@ -39,4 +32,5 @@ public class OrdenExportacion extends Orden {
 		return false;
 	}
 
+	
 }

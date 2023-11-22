@@ -55,7 +55,7 @@ public class TerminalGestionada {
         historialViajes.add(viaje);
     }
 
-    public List<Viaje> obtenerViajesPorDestino(Filtro filtro){
+    public List<Viaje> obtenerViajesPorFiltro(Filtro filtro){
     	 return historialViajes.stream()
                  .filter(filtro::cumpleFiltro)
                  .collect(Collectors.toList());
