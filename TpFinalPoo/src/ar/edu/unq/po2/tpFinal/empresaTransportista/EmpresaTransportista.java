@@ -10,8 +10,8 @@ public class EmpresaTransportista {
 	
 	public EmpresaTransportista(int cuit) {
 		this.cuit = cuit;
-		this.camiones = new ArrayList<>();
-		this.choferes = new ArrayList<>();
+		this.camiones = new ArrayList<Camion>();
+		this.choferes = new ArrayList<Chofer>();
 	}
 	
 	public void registrarCamion (Camion camion) {

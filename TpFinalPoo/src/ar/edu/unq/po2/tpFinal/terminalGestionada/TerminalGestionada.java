@@ -1,9 +1,11 @@
 package ar.edu.unq.po2.tpFinal.terminalGestionada;
+
 import ar.edu.unq.po2.tpFinal.buque.GPS;
 import ar.edu.unq.po2.tpFinal.buque.Posicion;
 import ar.edu.unq.po2.tpFinal.filtro.Filtro;
 import ar.edu.unq.po2.tpFinal.naviera.Circuito;
 import ar.edu.unq.po2.tpFinal.naviera.Naviera;
+import ar.edu.unq.po2.tpFinal.orden.Orden;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,13 +17,15 @@ public class TerminalGestionada {
 	private List<Naviera> lineasNavieras;
     private List<Circuito> circuitosMaritimos;
     private List<Viaje> historialViajes;
+    private List<Orden> ordenes;
 
     public TerminalGestionada(String nombre) {
         this.nombre = nombre;
-        this.lineasNavieras = new ArrayList<>();
-        this.circuitosMaritimos = new ArrayList<>();
+        this.lineasNavieras = new ArrayList<Naviera>();
+        this.circuitosMaritimos = new ArrayList<Circuito>();
         this.gps = new GPS();
         this.historialViajes = new ArrayList<Viaje>();
+        this.ordenes = new ArrayList<Orden>();
     }
     
     public Posicion obtenerPosicionActual(){
@@ -37,6 +41,10 @@ public class TerminalGestionada {
     public void registrarCircuitoMaritimo(Circuito circuitoMaritimo) {
     	circuitosMaritimos.add(circuitoMaritimo);
     }
+    
+    public void registrarOrden(Orden orden) {
+    	ordenes.add(orden);
+    }
 
     public String getNombre() {
         return nombre;
@@ -46,7 +54,6 @@ public class TerminalGestionada {
     	gps.actualizarPosicion(pos);
     }
     
-
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }

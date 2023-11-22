@@ -5,9 +5,11 @@ import ar.edu.unq.po2.tpFinal.container.Container;
 public class Camion {
 	private String patente;
 	private Container containerCargado;	
+	private Chofer chofer;
 	
-	public Camion (String patente) {
+	public Camion (String patente, Chofer chofer) {
 		this.patente = patente;
+		this.chofer = chofer;
 	}
 
 	public String getPatente() {
@@ -16,6 +18,14 @@ public class Camion {
 
 	public void setPatente(String patente) {
 		this.patente = patente;
+	}
+
+	public Chofer getChofer() {
+		return chofer;
+	}
+
+	public void setChofer(Chofer chofer) {
+		this.chofer = chofer;
 	}
 
 	public Container getContainerCargado() {
@@ -31,10 +41,18 @@ public class Camion {
 			containerCargado = container;
 		}
 		else {
-			System.out.println("El camion ya tiene un contenedor cargado");
+			System.out.println("El camion ya tiene un container cargado");
 		}
 	}
 
+	public void descargarContainer() {
+		if (containerCargado != null) {
+			containerCargado = null;
+		}
+		else {
+			System.out.println("El camion no tiene ningun container cargado");
+		}
+	}
 	
 	//Desde la terminal se debe implementar si se verifican las condiciones para que el camion deje la carga
 	//La misma implementacion de verificar condiciones para agarrar la carga
