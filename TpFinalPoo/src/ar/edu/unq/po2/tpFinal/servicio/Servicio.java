@@ -1,28 +1,6 @@
 package ar.edu.unq.po2.tpFinal.servicio;
 
-public class Servicio {
-	private String nombre;
-	private double costo;
-	
-	public Servicio(String nombre, double costo) {
-		this.nombre = nombre;
-		this.costo = costo;
-	}
-
-	public String getNombre() {
-		return nombre;
-	}
-
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
-	}
-
-	public double getCosto() {
-		return costo;
-	}
-
-	public void setCosto(double costo) {
-		this.costo = costo;
-	}
-	
+public interface Servicio {
+	double getCosto();
+	double calcularCosto(); // Método para calcular el costo específico de cada servicio
 }

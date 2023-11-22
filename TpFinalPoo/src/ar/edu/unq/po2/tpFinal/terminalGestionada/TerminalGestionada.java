@@ -30,8 +30,8 @@ public class TerminalGestionada {
     
     public Posicion obtenerPosicionActual(){
 		 return gps.obtenerPosicionActual();
-	 }
-
+	}
+   
     // Métodos para registrar líneas navieras, circuitos, etc.
 
     public void registrarLineaNaviera(Naviera lineaNaviera) {
