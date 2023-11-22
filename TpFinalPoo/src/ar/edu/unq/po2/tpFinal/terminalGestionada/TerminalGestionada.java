@@ -14,12 +14,14 @@ public class TerminalGestionada {
 	private GPS gps;
 	private List<Naviera> lineasNavieras;
     private List<Circuito> circuitosMaritimos;
+    private List<Viaje> historialViajes;
 
     public TerminalGestionada(String nombre) {
         this.nombre = nombre;
         this.lineasNavieras = new ArrayList<>();
         this.circuitosMaritimos = new ArrayList<>();
         this.gps = new GPS();
+        this.historialViajes = new ArrayList<Viaje>();
     }
     
     public Posicion obtenerPosicionActual(){
@@ -49,10 +51,14 @@ public class TerminalGestionada {
         this.nombre = nombre;
     }
     
-    public List<Circuito> buscarRutas(Filtro filtro) {
-        return circuitosMaritimos.stream()
-                .filter(filtro::cumpleFiltro)
-                .collect(Collectors.toList());
+    public void agregarViaje(Viaje viaje) {
+        historialViajes.add(viaje);
+    }
+
+    public List<Viaje> obtenerViajesPorDestino(Filtro filtro){
+    	 return historialViajes.stream()
+                 .filter(filtro::cumpleFiltro)
+                 .collect(Collectors.toList());
     }
     
 }

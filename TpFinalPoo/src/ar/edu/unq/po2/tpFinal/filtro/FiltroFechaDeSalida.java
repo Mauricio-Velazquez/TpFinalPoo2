@@ -1,11 +1,18 @@
 package ar.edu.unq.po2.tpFinal.filtro;
 
-public class FiltroFechaDeSalida implements Filtro {
-	
-	@Override
-	public boolean cumpleFiltro(Object elemento) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+import java.time.LocalDate;
 
+import ar.edu.unq.po2.tpFinal.terminalGestionada.Viaje;
+
+public class FiltroFechaDeSalida implements Filtro {
+	private LocalDate fechaInicio;
+    
+    public FiltroFechaDeSalida(LocalDate fechaInicio) {
+        this.fechaInicio = fechaInicio;
+    }
+
+    @Override
+    public boolean cumpleFiltro(Viaje viaje) {
+    	 return viaje.getFechaInicio()== fechaInicio;
+    }
 }
