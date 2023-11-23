@@ -1,5 +1,6 @@
 package ar.edu.unq.po2.tpFinal.buque;
 import ar.edu.unq.po2.tpFinal.container.Container;
+import ar.edu.unq.po2.tpFinal.servicio.Servicio;
 import ar.edu.unq.po2.tpFinal.terminalGestionada.TerminalGestionada;
 
 import java.util.ArrayList;
@@ -26,6 +27,16 @@ public class Buque {
 		 return estadoActual;
 	 }
 	 
+	 public double calcularMontoTotalServicios(){
+		 return containersAsociados.stream()
+	                .flatMap(container -> container.getServiciosContratados().stream())
+	                .mapToDouble(Servicio::getCosto)
+	                .sum();
+	 }
+	 
+	 public List<Container> getContainersAsociados(){
+		 return containersAsociados;
+	 }
 	 
 	 public void setEstadoActual(FaseDeBuque estadoActual){
 		 this.estadoActual = estadoActual;

@@ -1,11 +1,13 @@
 package ar.edu.unq.po2.tpFinal.terminalGestionada;
 
+import ar.edu.unq.po2.tpFinal.buque.Buque;
 import ar.edu.unq.po2.tpFinal.buque.GPS;
 import ar.edu.unq.po2.tpFinal.buque.Posicion;
 import ar.edu.unq.po2.tpFinal.filtro.Filtro;
 import ar.edu.unq.po2.tpFinal.naviera.Circuito;
 import ar.edu.unq.po2.tpFinal.naviera.Naviera;
 import ar.edu.unq.po2.tpFinal.orden.Orden;
+import ar.edu.unq.po2.tpFinal.servicio.Servicio;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +28,32 @@ public class TerminalGestionada {
         this.gps = new GPS();
         this.historialViajes = new ArrayList<Viaje>();
         this.ordenes = new ArrayList<Orden>();
+    }
+    
+    public String generarFacturaViajeYServicios(Buque buque, String responsablePago) {
+        double montoTotalServicios = buque.calcularMontoTotalServicios();
+
+        // sumar el costo de los tramos del viaje al monto total si es necesario
+
+        List<Servicio> serviciosContratados = buque.getContainersAsociados().stream()
+                .flatMap(container -> container.getServiciosContratados().stream())
+                .collect(Collectors.toList());
+
+        String facturaServicios = generarFactura(responsablePago, montoTotalServicios, serviciosContratados);
+        enviarFacturaPorEmail(responsablePago, facturaServicios);
+
+        // Devolver la factura para posibles usos adicionales
+        return facturaServicios;
+    }
+
+    private String generarFactura(String responsablePago, double montoTotalServicios
+    		, List<Servicio> servicios) {
+    	return "Factura generada para " + responsablePago + ". Total a pagar por servicios: $" + montoTotalServicios;
+    }
+
+    private void enviarFacturaPorEmail(String responsablePago, String factura) {
+        // Lógica para enviar la factura por email
+        // ...
     }
     
     public Posicion obtenerPosicionActual(){
