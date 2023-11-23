@@ -1,7 +1,6 @@
 package ar.edu.unq.po2.tpFinal.orden;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,13 +18,10 @@ public abstract class Orden {
 	private LocalDate fechaLlegada;
 	private int nroOrden;
 	private Cliente cliente;
-	private LocalDateTime horaLlegada; 
-	private LocalDateTime horaSalida; 
     private List<Servicio> servicios;
 
 	public Orden(Container container, Viaje viaje, Camion camion, LocalDate fechaSalida, 
-			LocalDate fechaLlegada, int nroOrden, Cliente cliente,
-			LocalDateTime horaLlegada, LocalDateTime horaSalida) {
+			LocalDate fechaLlegada, int nroOrden, Cliente cliente) {
 		this.container = container;
 		this.viaje = viaje;
 		this.camion = camion;
@@ -33,8 +29,6 @@ public abstract class Orden {
 		this.fechaLlegada = fechaLlegada;
 		this.nroOrden = nroOrden;
 		this.cliente = cliente;
-		this.horaLlegada = horaLlegada;
-		this.horaSalida = horaSalida;
 		servicios = new ArrayList<Servicio>();
 	}
 	
@@ -96,22 +90,6 @@ public abstract class Orden {
 
 	public void setCliente(Cliente cliente) {
 		this.cliente = cliente;
-	}
-
-	public int getHoraLlegada() {
-		return horaLlegada.getHour();
-	}
-
-	public void setHoraLlegada(int hora) {
-		this.horaLlegada = horaLlegada.withHour(hora);
-	}
-
-	public int getHoraSalida() {
-		return horaSalida.getHour();
-	}
-
-	public void setHoraSalida(int hora) {
-		this.horaSalida = horaSalida.withHour(hora);
 	}
 
 	public List<Servicio> getServicios() {
