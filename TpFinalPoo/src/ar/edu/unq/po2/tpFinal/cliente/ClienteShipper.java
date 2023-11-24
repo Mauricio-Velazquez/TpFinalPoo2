@@ -12,8 +12,8 @@ import ar.edu.unq.po2.tpFinal.terminalGestionada.Turno;
 public class ClienteShipper extends Cliente {
 	private Turno turno;
 
-	public ClienteShipper(String nombre, int dni) {
-		super(nombre, dni);
+	public ClienteShipper(String nombre, int dni, String mail) {
+		super(nombre, dni, mail);
 	}
 	
 	public Turno getTurno() {

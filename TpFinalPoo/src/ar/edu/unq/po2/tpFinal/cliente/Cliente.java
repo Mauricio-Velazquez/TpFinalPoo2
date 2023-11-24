@@ -10,10 +10,12 @@ import ar.edu.unq.po2.tpFinal.terminalGestionada.TerminalGestionada;
 public abstract class Cliente {
 	private String nombre;
 	private int dni;
+	private String mail;
 	
-	public Cliente(String nombre, int dni) {
+	public Cliente(String nombre, int dni, String mail) {
 		this.nombre = nombre;
 		this.dni = dni;
+		this.mail = mail;
 	}
 	
 	public String getNombre() {
@@ -32,5 +34,13 @@ public abstract class Cliente {
 		this.dni = dni;
 	}
 	
+	public String getMail() {
+		return mail;
+	}
+
+	public void setMail(String mail) {
+		this.mail = mail;
+	}
+
 	public abstract void enviarOrden(TerminalGestionada terminal, Container container, Camion camion, List<Servicio> servicios);
 }

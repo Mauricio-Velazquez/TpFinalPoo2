@@ -29,7 +29,6 @@ public class TerminalGestionada {
     private List<Cliente> clientes;
     private List<EmpresaTransportista> empresas;
     
-
     public TerminalGestionada(String nombre) {
         this.nombre = nombre;
         this.lineasNavieras = new ArrayList<Naviera>();
@@ -132,7 +131,7 @@ public class TerminalGestionada {
     }
     
     public void verificarCondicionesDeIngresoDe(ClienteShipper cliente, Camion camion, Reloj reloj) {
-    	if(!this.verificarHorario(cliente, reloj) && this.verificarCamion(camion) && this.verificarChofer(camion.getChofer())) {
+    	if(this.verificarSiLlegoEnHorario(cliente, reloj) && this.verificarCamion(camion) && this.verificarChofer(camion.getChofer())) {
     		camion.descargarContainer();
 			System.out.println("Carga depositada");
     	}
@@ -141,9 +140,9 @@ public class TerminalGestionada {
 		}
     }
     
-    public boolean verificarHorario(ClienteShipper cliente, Reloj reloj) {
+    public boolean verificarSiLlegoEnHorario(ClienteShipper cliente, Reloj reloj) {
     	int diferenciaEnHoras = reloj.getHora() - cliente.getTurno().getHora();
-    	return diferenciaEnHoras > 3;
+    	return !(diferenciaEnHoras > 3);
     }
         
     public boolean verificarCamion(Camion camion) {

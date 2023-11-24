@@ -7,15 +7,12 @@ public class Tramo {
 	private TerminalGestionada terminalDestino;
 	private double costo;
 	private int tiempoEstimadoEnHoras;
-	private double distanciaEnKilometros;
 	
-	public Tramo(TerminalGestionada terminalOrigen, TerminalGestionada terminalDestino, double costo,
-			int tiempoEstimadoEnHoras, double distanciaEnKilometros) {
+	public Tramo(TerminalGestionada terminalOrigen, TerminalGestionada terminalDestino, double costo, int tiempoEstimadoEnHoras) {
 		this.terminalOrigen = terminalOrigen;
 		this.terminalDestino = terminalDestino;
 		this.costo = costo;
 		this.tiempoEstimadoEnHoras = tiempoEstimadoEnHoras;
-		this.distanciaEnKilometros = distanciaEnKilometros;
 	}
 
 	public TerminalGestionada getTerminalOrigen() {
@@ -49,14 +46,9 @@ public class Tramo {
 	public void setTiempoEstimadoEnHoras(int tiempoEstimadoEnHoras) {
 		this.tiempoEstimadoEnHoras = tiempoEstimadoEnHoras;
 	}
-
-	public double getDistanciaEnKilometros() {
-		return distanciaEnKilometros;
+	
+	public boolean incluyeTerminal(TerminalGestionada terminal) {
+	    return this.terminalOrigen.equals(terminal) || this.terminalDestino.equals(terminal);
 	}
 
-	public void setDistanciaEnKilometros(double distanciaEnKilometros) {
-		this.distanciaEnKilometros = distanciaEnKilometros;
-	}
-	
-	
 }
