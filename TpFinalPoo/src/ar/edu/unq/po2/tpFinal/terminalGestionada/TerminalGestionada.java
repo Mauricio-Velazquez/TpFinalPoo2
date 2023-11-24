@@ -3,11 +3,12 @@ package ar.edu.unq.po2.tpFinal.terminalGestionada;
 import ar.edu.unq.po2.tpFinal.buque.Buque;
 import ar.edu.unq.po2.tpFinal.buque.GPS;
 import ar.edu.unq.po2.tpFinal.buque.Posicion;
+import ar.edu.unq.po2.tpFinal.cliente.Cliente;
 import ar.edu.unq.po2.tpFinal.cliente.ClienteShipper;
 import ar.edu.unq.po2.tpFinal.empresaTransportista.Camion;
 import ar.edu.unq.po2.tpFinal.empresaTransportista.Chofer;
+import ar.edu.unq.po2.tpFinal.empresaTransportista.EmpresaTransportista;
 import ar.edu.unq.po2.tpFinal.filtro.Filtro;
-import ar.edu.unq.po2.tpFinal.naviera.Circuito;
 import ar.edu.unq.po2.tpFinal.naviera.Naviera;
 import ar.edu.unq.po2.tpFinal.orden.Orden;
 import ar.edu.unq.po2.tpFinal.servicio.Servicio;
@@ -23,17 +24,20 @@ public class TerminalGestionada {
 	private String nombre;
 	private GPS gps;
 	private List<Naviera> lineasNavieras;
-    private List<Circuito> circuitosMaritimos;
-    private List<Viaje> historialViajes;
+    private List<Viaje> viajes;
     private List<Orden> ordenes;
+    private List<Cliente> clientes;
+    private List<EmpresaTransportista> empresas;
+    
 
     public TerminalGestionada(String nombre) {
         this.nombre = nombre;
         this.lineasNavieras = new ArrayList<Naviera>();
-        this.circuitosMaritimos = new ArrayList<Circuito>();
         this.gps = new GPS();
-        this.historialViajes = new ArrayList<Viaje>();
+        this.viajes = new ArrayList<Viaje>();
         this.ordenes = new ArrayList<Orden>();
+        this.clientes = new ArrayList<Cliente>();
+        this.empresas = new ArrayList<EmpresaTransportista>();
     }
     
     public String generarFacturaViajeYServicios(Buque buque, String responsablePago) {
@@ -71,13 +75,17 @@ public class TerminalGestionada {
     public void registrarLineaNaviera(Naviera lineaNaviera) {
     	lineasNavieras.add(lineaNaviera);
     }
-
-    public void registrarCircuitoMaritimo(Circuito circuitoMaritimo) {
-    	circuitosMaritimos.add(circuitoMaritimo);
-    }
     
     public void registrarOrden(Orden orden) {
     	ordenes.add(orden);
+    }
+    
+    public void registrarCliente(Cliente cliente) {
+    	clientes.add(cliente);
+    }
+    
+    public void registrarEmpresaTransportista(EmpresaTransportista empresa) {
+    	empresas.add(empresa);
     }
 
     public String getNombre() {
@@ -93,17 +101,17 @@ public class TerminalGestionada {
     }
     
     public void agregarViaje(Viaje viaje) {
-        historialViajes.add(viaje);
+        viajes.add(viaje);
     }
 
     public List<Viaje> obtenerViajesPorFiltro(Filtro filtro){
-    	 return historialViajes.stream()
+    	 return viajes.stream()
                  .filter(filtro::cumpleFiltro)
                  .collect(Collectors.toList());
     }
     
     public Viaje viajeMasCorto() {
-    	return historialViajes.stream()
+    	return viajes.stream()
     			.min(Comparator.comparingInt(v -> v.getCircuito().getTiempoTotalEstimadoDeLosTramos()))
                 .orElse(null);
     }
