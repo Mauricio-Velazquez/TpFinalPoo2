@@ -48,9 +48,9 @@ public class Naviera {
 		this.buques = buques;
 	}
 	
-    // Calcula y devuelve el tiempo total estimado de todos los circuitos.
+	// Calcula y devuelve el tiempo total en horas de todos los circuitos.
     public int getTiempoTotalEstimadoDeLosCircuitos() {
-        return circuitos.stream().mapToInt(c -> c.getTiempoTotalEstimadoDeLosTramos()).sum();
+        return circuitos.stream().mapToInt(c -> c.getTiempoTotal()).sum();
     }
 	
 }
