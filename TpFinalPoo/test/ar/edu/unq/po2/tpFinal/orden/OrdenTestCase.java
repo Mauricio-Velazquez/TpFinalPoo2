@@ -50,7 +50,7 @@ public class OrdenTestCase {
 	private Reloj reloj;
 	
     @BeforeEach
-    public void setUp() throws Exception{
+    public void setUp() {
         terminal1 = new TerminalGestionada("TerminalTest");
 		terminal2 = mock(TerminalGestionada.class);
 		terminal3 = mock(TerminalGestionada.class);
