@@ -1,2 +1,6 @@
 /bin/
+<<<<<<< HEAD
 .classpath
+=======
+mockito-all-2.0.2-beta.jar
+>>>>>>> 6b91b30004179cf09a19acfd06dcf59ab3601799

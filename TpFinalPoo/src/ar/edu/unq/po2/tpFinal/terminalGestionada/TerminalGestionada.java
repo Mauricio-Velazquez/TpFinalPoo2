@@ -9,6 +9,7 @@ import ar.edu.unq.po2.tpFinal.empresaTransportista.Camion;
 import ar.edu.unq.po2.tpFinal.empresaTransportista.Chofer;
 import ar.edu.unq.po2.tpFinal.empresaTransportista.EmpresaTransportista;
 import ar.edu.unq.po2.tpFinal.filtro.Filtro;
+import ar.edu.unq.po2.tpFinal.naviera.Circuito;
 import ar.edu.unq.po2.tpFinal.naviera.Naviera;
 import ar.edu.unq.po2.tpFinal.orden.Orden;
 import ar.edu.unq.po2.tpFinal.servicio.Servicio;
@@ -151,7 +152,7 @@ public class TerminalGestionada {
     
     public Viaje viajeMasCorto() {
     	return viajes.stream()
-    			.min(Comparator.comparingInt(v -> v.getCircuito().getTiempoTotalEstimadoDeLosTramos()))
+    			.min(Comparator.comparingInt(v -> v.getCircuito().getTiempoTotal()))
                 .orElse(null);
     }
     
@@ -192,5 +193,9 @@ public class TerminalGestionada {
     public boolean verificarChofer(Chofer chofer) {
     	return ordenes.stream().anyMatch(orden -> orden.getCamion().getChofer().equals(chofer));
     }
+    
+	public Circuito obtenerMejorCircuito(TerminalGestionada terminal) {
+		return null; //Terminar 
+	}
     
 }
