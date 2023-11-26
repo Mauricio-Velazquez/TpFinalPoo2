@@ -41,6 +41,10 @@ public abstract class Cliente {
 	public void setMail(String mail) {
 		this.mail = mail;
 	}
+	
+	public void recibirFactura(String factura) {
+		System.out.println("Se recibio la factura" + factura);
+	}
 
 	public abstract void enviarOrden(TerminalGestionada terminal, Container container, Camion camion, List<Servicio> servicios);
 }

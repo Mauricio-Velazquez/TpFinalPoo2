@@ -22,6 +22,10 @@ public class Buque {
 		this.gps = new GPS();
 		this.terminal = terminal;
 	}
+	
+	public int getIdentificador() {
+		return this.identificador;
+	}
 	 
 	 public FaseDeBuque getEstadoActual() {
 		 return estadoActual;
@@ -47,13 +51,18 @@ public class Buque {
 		 containersAsociados.add(container);
 	 }
 	 
+	 public TerminalGestionada getTerminal() {
+		 return terminal;
+	 }
+	 
 	 public Posicion obtenerPosicionActual() {
 		 return gps.obtenerPosicionActual();
 	 }
 	 
 	 public void moverBuque(Posicion nuevaPosicion) {
 		 gps.actualizarPosicion(nuevaPosicion);
-		    if (estadoActual.deberiaCambiar(this, terminal.obtenerPosicionActual())) {
+		    if (estadoActual.deberiaCambiar(this, terminal)) {
+		    	estadoActual.notificarTerminal(this,terminal);
 		        estadoActual.siguienteFase(this);
 		        System.out.println("Nueva fase: " + estadoActual);
 		    }

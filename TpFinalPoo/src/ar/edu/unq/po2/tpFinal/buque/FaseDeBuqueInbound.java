@@ -1,5 +1,6 @@
 package ar.edu.unq.po2.tpFinal.buque;
 
+import ar.edu.unq.po2.tpFinal.terminalGestionada.TerminalGestionada;
 
 public class FaseDeBuqueInbound implements FaseDeBuque {
 	
@@ -9,7 +10,7 @@ public class FaseDeBuqueInbound implements FaseDeBuque {
 	}
 	
 	@Override
-	public boolean deberiaCambiar(Buque buque,Posicion ubicacionTerminal ) {
+	public boolean deberiaCambiar(Buque buque,TerminalGestionada terminal){
 	    double distancia = buque.calcularDistanciaATerminal();
 	    return distancia == 0.0; // Cambiar de fase si la distancia es menor a 50 km;
     }
@@ -18,4 +19,9 @@ public class FaseDeBuqueInbound implements FaseDeBuque {
     public String toString() {
         return "FaseDeBuqueInbound";
     }
+
+	@Override
+	public void notificarTerminal(Buque buque,TerminalGestionada terminal) {
+		terminal.notificarCliente(buque);;
+	}
 }

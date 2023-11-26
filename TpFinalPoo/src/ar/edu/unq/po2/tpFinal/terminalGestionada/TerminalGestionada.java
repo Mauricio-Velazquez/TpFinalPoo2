@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class TerminalGestionada {
@@ -39,6 +40,36 @@ public class TerminalGestionada {
         this.empresas = new ArrayList<EmpresaTransportista>();
     }
     
+    public boolean consultarInicioDeTrabajo() {
+    	return true;
+    }
+    
+    public boolean habilitarPartida(Buque buque) {
+    	buque.getEstadoActual().siguienteFase(buque);
+    	return true;// Cambio de fase
+    }
+    
+    public void notificarCliente(Buque buque) {
+        List<Orden> ordenesEsperandoBuque = obtenerOrdenesEsperandoBuque(buque);
+
+        // Enviar un correo a cada consignee asociado a las órdenes esperando el buque
+        ordenesEsperandoBuque.stream()
+        .map(Orden::getCliente)
+        .forEach(cliente -> enviarCorreoConsignee(cliente, "El buque " + buque.getIdentificador() + "se encuentra en estado"+ buque.getEstadoActual()));
+    }
+
+    private List<Orden> obtenerOrdenesEsperandoBuque(Buque buque) {
+        return ordenes.stream()
+                .filter(orden -> orden.getViaje().getBuque().equals(buque))
+                .collect(Collectors.toList());
+    }
+
+    private void enviarCorreoConsignee(Cliente cliente, String mensaje) {
+        // Lógica para enviar el correo al consignee
+        // ...
+        System.out.println("Correo enviado a " + cliente.getNombre() + ": " + mensaje);
+    }
+    
     public String generarFacturaViajeYServicios(Buque buque, String responsablePago) {
         double montoTotalServicios = buque.calcularMontoTotalServicios();
 
@@ -49,7 +80,6 @@ public class TerminalGestionada {
                 .collect(Collectors.toList());
 
         String facturaServicios = generarFactura(responsablePago, montoTotalServicios, serviciosContratados);
-        enviarFacturaPorEmail(responsablePago, facturaServicios);
 
         // Devolver la factura para posibles usos adicionales
         return facturaServicios;
@@ -60,9 +90,19 @@ public class TerminalGestionada {
     	return "Factura generada para " + responsablePago + ". Total a pagar por servicios: $" + montoTotalServicios;
     }
 
-    private void enviarFacturaPorEmail(String responsablePago, String factura) {
-        // Lógica para enviar la factura por email
-        // ...
+    public void enviarFacturaPorEmail(Buque buque,TerminalGestionada terminal) {
+    	/*
+    	 * siempre habrá una única orden asociada al buque y
+    	 * esa orden contendrá al cliente responsable del pago
+    	 * */
+    	Optional<Orden> ordenBuscada = ordenes.stream()
+                .filter(orden -> orden.getViaje().getBuque().equals(buque))
+                .findFirst();
+    	ordenBuscada.ifPresent(orden -> {
+    		Cliente buscado = orden.getCliente();
+    		buscado.recibirFactura(generarFacturaViajeYServicios(buque,(buscado.getNombre())));
+    	});
+    	
     }
     
     public Posicion obtenerPosicionActual(){
