@@ -26,10 +26,10 @@ public class ClienteShipper extends Cliente {
 
 	public void enviarOrden(TerminalGestionada terminal, Container container, Camion camion, List<Servicio> servicios) {
 		
-		OrdenExportacion orden = new OrdenExportacion(container, terminal.viajeMasCorto(), camion, terminal.viajeMasCorto().getFechaInicio(), 
+		OrdenExportacion orden = new OrdenExportacion(container, terminal.viajeMasCorto(), camion, terminal.viajeMasCorto().getFechaSalida(), 
 				terminal.viajeMasCorto().getFechaLlegada(), terminal.darNroDeOrden(), this);
 		orden.setServicios(servicios);
 		terminal.registrarOrden(orden);
-		terminal.asignarTurno(this, terminal.viajeMasCorto().getFechaInicio());
+		terminal.asignarTurno(this, terminal.viajeMasCorto().getFechaSalida());
 	}
 }

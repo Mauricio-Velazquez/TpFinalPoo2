@@ -15,5 +15,4 @@ public class Chofer {
 		this.dni = dni;
 	}
 	
-	
 }

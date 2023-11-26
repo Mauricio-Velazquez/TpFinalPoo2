@@ -61,7 +61,7 @@ public class OrdenTestCase {
         
         container1 = mock(ContainerDry.class);
 		chofer1 = mock(Chofer.class);
-		camion1 = mock(Camion.class);
+		camion1 = new Camion("AAA111", chofer1);
 		buque1 = mock(Buque.class);
 		buque2 = mock(Buque.class);
 		
@@ -83,6 +83,9 @@ public class OrdenTestCase {
         viaje2 = new Viaje(LocalDate.of(2023, 11, 15), buque2, circuito2, LocalDate.of(2023, 11, 17));
         terminal1.agregarViaje(viaje1);
         terminal1.agregarViaje(viaje2);
+        
+        terminal1.registrarCliente(cliente1);
+        terminal1.registrarCliente(cliente2);
         
         cliente1.enviarOrden(terminal1, container1, camion1, new ArrayList<Servicio>());
         

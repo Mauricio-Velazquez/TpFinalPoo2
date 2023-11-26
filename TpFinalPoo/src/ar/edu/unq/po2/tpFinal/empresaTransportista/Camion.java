@@ -54,7 +54,7 @@ public class Camion {
 		}
 	}
 	
-	//Desde la terminal se debe implementar si se verifican las condiciones para que el camion deje la carga
-	//La misma implementacion de verificar condiciones para agarrar la carga
+	//Desde la terminal se debe implementar si se verifican las condiciones para que el camion deje la carga.
+	//La misma implementacion de verificar condiciones para agarrar la carga.
 	
 }

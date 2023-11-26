@@ -9,10 +9,10 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class Buque {
-	int identificador;
+	private int identificador;
 	private GPS gps;
-	FaseDeBuque estadoActual;
-	List <Container> containersAsociados;
+	private FaseDeBuque estadoActual;
+	private List <Container> containersAsociados;
 	private TerminalGestionada terminal;
 	
 	public Buque(int identificador,TerminalGestionada terminal) {

@@ -1,8 +1,10 @@
 package ar.edu.unq.po2.tpFinal.container;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import ar.edu.unq.po2.tpFinal.servicio.*;
+
 public abstract class Container {
 	private int id; 
 	private double ancho;
@@ -19,6 +21,7 @@ public abstract class Container {
 	    this.pesoTotal = pesoTotal;
 	    this.serviciosContratados = new ArrayList<Servicio>();
 	}
+	
 	public void contratarServicio(Servicio servicio) {
 		serviciosContratados.add(servicio);
 	}

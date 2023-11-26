@@ -5,14 +5,14 @@ import java.time.LocalDate;
 import ar.edu.unq.po2.tpFinal.terminalGestionada.Viaje;
 
 public class FiltroFechaDeSalida implements Filtro {
-	private LocalDate fechaInicio;
+	private LocalDate fechaSalida;
     
-    public FiltroFechaDeSalida(LocalDate fechaInicio) {
-        this.fechaInicio = fechaInicio;
+    public FiltroFechaDeSalida(LocalDate fechaSalida) {
+        this.fechaSalida = fechaSalida;
     }
 
     @Override
     public boolean cumpleFiltro(Viaje viaje) {
-    	 return viaje.getFechaInicio().isEqual(fechaInicio);
+    	 return viaje.getFechaSalida().isEqual(fechaSalida);
     }
 }

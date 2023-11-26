@@ -50,5 +50,9 @@ public class Tramo {
 	public boolean incluyeTerminal(TerminalGestionada terminal) {
 	    return this.terminalOrigen.equals(terminal) || this.terminalDestino.equals(terminal);
 	}
+	
+	public boolean incluyeTerminalDestino(TerminalGestionada terminal) {
+	    return this.terminalDestino.equals(terminal);
+	}
 
 }

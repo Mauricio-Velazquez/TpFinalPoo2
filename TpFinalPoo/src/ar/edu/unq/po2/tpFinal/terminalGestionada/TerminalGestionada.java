@@ -153,7 +153,7 @@ public class TerminalGestionada {
     public Viaje viajeMasCorto() {
     	return viajes.stream()
     			.min(Comparator.comparingInt(v -> v.getCircuito().getTiempoTotal()))
-                .orElse(null);
+                .orElse(null); //Borrar despues
     }
     
     public int darNroDeOrden(){

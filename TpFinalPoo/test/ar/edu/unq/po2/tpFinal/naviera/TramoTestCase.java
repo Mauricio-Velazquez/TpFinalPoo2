@@ -34,5 +34,15 @@ public class TramoTestCase {
 	void testTramoNoIncluyeTerminal() {
 		assertFalse(tramo2.incluyeTerminal(terminal1));
 	}
+	
+	@Test
+	void testTramoIncluyeTerminalDestino() {
+		assertTrue(tramo2.incluyeTerminalDestino(terminal3));
+	}
+	
+	@Test
+	void testTramoNoIncluyeTerminalDestino() {
+		assertFalse(tramo2.incluyeTerminalDestino(terminal2));
+	}
 
 }

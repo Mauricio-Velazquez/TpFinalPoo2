@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EmpresaTransportista {
-	private int cuit;
+	private String nombre;
 	private List<Camion> camiones;
 	private List<Chofer> choferes;
 	
-	public EmpresaTransportista(int cuit) {
-		this.cuit = cuit;
+	public EmpresaTransportista(String nombre) {
+		this.nombre = nombre;
 		this.camiones = new ArrayList<Camion>();
 		this.choferes = new ArrayList<Chofer>();
 	}
@@ -22,12 +22,12 @@ public class EmpresaTransportista {
 		choferes.add(chofer);
 	}
 
-	public int getCuit() {
-		return cuit;
+	public String getNombre() {
+		return nombre;
 	}
 
-	public void setCuit(int cuit) {
-		this.cuit = cuit;
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
 	}
 
 	public List<Camion> getCamiones() {
@@ -46,6 +46,6 @@ public class EmpresaTransportista {
 		this.choferes = choferes;
 	}
 	
-	//En la temrinal se corrobora si los choferes y camiones estan autorizados
+	//En la terminal se chequea si los choferes y camiones estan autorizados
 	
 }

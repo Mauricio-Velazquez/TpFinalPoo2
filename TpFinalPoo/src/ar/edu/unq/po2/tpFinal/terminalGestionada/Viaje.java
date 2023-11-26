@@ -6,28 +6,28 @@ import ar.edu.unq.po2.tpFinal.buque.Buque;
 import ar.edu.unq.po2.tpFinal.naviera.Circuito;
 
 public class Viaje {
-	private LocalDate fechaInicio;
+	private LocalDate fechaSalida;
     private Buque buque;
     private Circuito circuito;
     private LocalDate fechaLlegada;
 
-    public Viaje(LocalDate fechaInicio, Buque buque, Circuito circuito,LocalDate fechaLlegada) {
-        this.fechaInicio = fechaInicio;
+    public Viaje(LocalDate fechaSalida, Buque buque, Circuito circuito, LocalDate fechaLlegada) {
+        this.fechaSalida = fechaSalida;
         this.buque = buque;
         this.circuito = circuito;
         this.fechaLlegada = fechaLlegada;
     }
 
-    public LocalDate getFechaInicio() {
-        return fechaInicio;
+    public LocalDate getFechaSalida() {
+        return fechaSalida;
     }
     
     public LocalDate getFechaLlegada() {
         return fechaLlegada;
     }
 
-    public void setFechaInicio(LocalDate fechaInicio) {
-        this.fechaInicio = fechaInicio;
+    public void setFechaSalida(LocalDate fechaSalida) {
+        this.fechaSalida = fechaSalida;
     }
 
     public Buque getBuque() {
