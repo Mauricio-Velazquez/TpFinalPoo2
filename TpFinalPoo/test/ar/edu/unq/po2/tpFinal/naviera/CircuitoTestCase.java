@@ -25,7 +25,7 @@ public class CircuitoTestCase {
 	private Tramo tramo4;
 	
 	@BeforeEach
-	void setUp() {
+	public void setUp() {
 		terminal1 = mock(TerminalGestionada.class);
 		terminal2 = mock(TerminalGestionada.class);
 		terminal3 = mock(TerminalGestionada.class);
@@ -40,19 +40,19 @@ public class CircuitoTestCase {
 	}
 
 	@Test
-	void agregarTramoACircuitoVacio() throws Exception {
+	public void agregarTramoACircuitoVacio() throws Exception {
 		circuito1.agregarTramo(tramo1);
 		assertEquals(circuito1.cantidadDeTramos(), 1);
 	}
 	
 	@Test
-	void agregarTramoInvalidoACircuito() throws Exception {
+	public void agregarTramoInvalidoACircuito() throws Exception {
 		circuito1.agregarTramo(tramo1);
 		assertThrows(Exception.class, () -> circuito1.agregarTramo(tramo4));
 	}
 
 	@Test
-	void testObtenerUltimoTramo() throws Exception {
+	public void testObtenerUltimoTramo() throws Exception {
 		circuito1.agregarTramo(tramo2);
 		circuito1.agregarTramo(tramo3);
 		circuito1.agregarTramo(tramo4);
@@ -60,7 +60,7 @@ public class CircuitoTestCase {
 	}
 	
 	@Test
-	void testObtenerPrimeraTerminalOrigenYUltimaTerminalDestino() throws Exception {
+	public void testObtenerPrimeraTerminalOrigenYUltimaTerminalDestino() throws Exception {
 		circuito1.agregarTramo(tramo2);
 		circuito1.agregarTramo(tramo3);
 		circuito1.agregarTramo(tramo4);
@@ -69,7 +69,7 @@ public class CircuitoTestCase {
 	}
 	
 	@Test
-	void testCircuitoIncluyeTerminal() throws Exception {
+	public void testCircuitoIncluyeTerminal() throws Exception {
 		circuito1.agregarTramo(tramo1);
 		circuito1.agregarTramo(tramo2);
 		circuito1.agregarTramo(tramo3);
@@ -77,7 +77,7 @@ public class CircuitoTestCase {
 	}
 	
 	@Test
-	void testCircuitoNoIncluyeTerminal() throws Exception {
+	public void testCircuitoNoIncluyeTerminal() throws Exception {
 		circuito1.agregarTramo(tramo1);
 		circuito1.agregarTramo(tramo2);
 		circuito1.agregarTramo(tramo3);
@@ -85,7 +85,7 @@ public class CircuitoTestCase {
 	}
 	
 	@Test
-	void testTiempoTotalDelCircuito() throws Exception {
+	public void testTiempoTotalDelCircuito() throws Exception {
 		circuito1.agregarTramo(tramo1);
 		circuito1.agregarTramo(tramo2);
 		circuito1.agregarTramo(tramo3);
@@ -94,7 +94,7 @@ public class CircuitoTestCase {
 	}
 	
 	@Test
-	void testCostoTotalDelCircuito() throws Exception {
+	public void testCostoTotalDelCircuito() throws Exception {
 		circuito1.agregarTramo(tramo1);
 		circuito1.agregarTramo(tramo2);
 		circuito1.agregarTramo(tramo3);
@@ -103,7 +103,7 @@ public class CircuitoTestCase {
 	}
 	
 	@Test
-	void testCantidadDeTramosHastaUnaDeterminadaTerminalDestino() throws Exception {
+	public void testCantidadDeTramosHastaUnaDeterminadaTerminalDestino() throws Exception {
 		circuito1.agregarTramo(tramo1);
 		circuito1.agregarTramo(tramo2);
 		circuito1.agregarTramo(tramo3);
@@ -112,7 +112,7 @@ public class CircuitoTestCase {
 	}
 	
 	@Test
-	void testCantidadDeTramosHastaUnaTerminalDestinoQueNoExiste() throws Exception {
+	public void testCantidadDeTramosHastaUnaTerminalDestinoQueNoExiste() throws Exception {
 		circuito1.agregarTramo(tramo1);
 		circuito1.agregarTramo(tramo2);
 		circuito1.agregarTramo(tramo3);
@@ -121,7 +121,7 @@ public class CircuitoTestCase {
 	}
 	
 	@Test
-	void testCostoHastaUnaDeterminadaTerminalDestino() throws Exception {
+	public void testCostoHastaUnaDeterminadaTerminalDestino() throws Exception {
 		circuito1.agregarTramo(tramo1);
 		circuito1.agregarTramo(tramo2);
 		circuito1.agregarTramo(tramo3);
@@ -130,7 +130,7 @@ public class CircuitoTestCase {
 	}
 	
 	@Test
-	void testCostoHastaUnaTerminalDestinoQueNoExiste() throws Exception {
+	public void testCostoHastaUnaTerminalDestinoQueNoExiste() throws Exception {
 		circuito1.agregarTramo(tramo1);
 		circuito1.agregarTramo(tramo2);
 		circuito1.agregarTramo(tramo3);
@@ -139,7 +139,7 @@ public class CircuitoTestCase {
 	}
 	
 	@Test
-	void testTiempoHastaUnaDeterminadaTerminalDestino() throws Exception {
+	public void testTiempoHastaUnaDeterminadaTerminalDestino() throws Exception {
 		circuito1.agregarTramo(tramo1);
 		circuito1.agregarTramo(tramo2);
 		circuito1.agregarTramo(tramo3);
@@ -148,7 +148,7 @@ public class CircuitoTestCase {
 	}
 	
 	@Test
-	void testTiempoHastaUnaTerminalDestinoQueNoExiste() throws Exception {
+	public void testTiempoHastaUnaTerminalDestinoQueNoExiste() throws Exception {
 		circuito1.agregarTramo(tramo1);
 		circuito1.agregarTramo(tramo2);
 		circuito1.agregarTramo(tramo3);

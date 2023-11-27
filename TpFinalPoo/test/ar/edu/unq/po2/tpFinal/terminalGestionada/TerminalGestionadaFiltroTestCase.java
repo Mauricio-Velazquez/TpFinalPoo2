@@ -4,6 +4,7 @@ import ar.edu.unq.po2.tpFinal.filtro.Filtro;
 import ar.edu.unq.po2.tpFinal.filtro.FiltroAnd;
 import ar.edu.unq.po2.tpFinal.filtro.FiltroFechaDeLlegada;
 import ar.edu.unq.po2.tpFinal.filtro.FiltroFechaDeSalida;
+import ar.edu.unq.po2.tpFinal.naviera.EstrategiaMenorCosto;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,7 +22,7 @@ class TerminalGestionadaFiltroTestCase {
 	 
 	 @BeforeEach
 	 public void setUp() {
-		 terminal = new TerminalGestionada("TerminalTest");
+		 terminal = new TerminalGestionada("TerminalTest", new EstrategiaMenorCosto());
 
 	     viaje1 = new Viaje(LocalDate.of(2023, 11, 15), null, null, LocalDate.of(2023, 12, 1));
 	     viaje2 = new Viaje(LocalDate.of(2023, 11, 20), null, null, LocalDate.of(2023, 12, 5));

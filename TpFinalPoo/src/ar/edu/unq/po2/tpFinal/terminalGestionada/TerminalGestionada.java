@@ -5,13 +5,16 @@ import ar.edu.unq.po2.tpFinal.buque.GPS;
 import ar.edu.unq.po2.tpFinal.buque.Posicion;
 import ar.edu.unq.po2.tpFinal.cliente.Cliente;
 import ar.edu.unq.po2.tpFinal.cliente.ClienteShipper;
+import ar.edu.unq.po2.tpFinal.container.Container;
 import ar.edu.unq.po2.tpFinal.empresaTransportista.Camion;
 import ar.edu.unq.po2.tpFinal.empresaTransportista.Chofer;
 import ar.edu.unq.po2.tpFinal.empresaTransportista.EmpresaTransportista;
 import ar.edu.unq.po2.tpFinal.filtro.Filtro;
 import ar.edu.unq.po2.tpFinal.naviera.Circuito;
+import ar.edu.unq.po2.tpFinal.naviera.EstrategiaMejorCircuito;
 import ar.edu.unq.po2.tpFinal.naviera.Naviera;
 import ar.edu.unq.po2.tpFinal.orden.Orden;
+import ar.edu.unq.po2.tpFinal.orden.OrdenExportacion;
 import ar.edu.unq.po2.tpFinal.servicio.Servicio;
 
 import java.time.LocalDate;
@@ -28,17 +31,23 @@ public class TerminalGestionada {
 	private List<Naviera> lineasNavieras;
     private List<Viaje> viajes;
     private List<Orden> ordenes;
-    private List<Cliente> clientes;
+    private List<Cliente> clientes; // Para realizar validaciones de orden.
+    private List<Camion> camiones;  // Para realizar validaciones de orden.
+    private List<Chofer> choferes;  // Para realizar validaciones de orden.
     private List<EmpresaTransportista> empresas;
+    private EstrategiaMejorCircuito estrategia;
     
-    public TerminalGestionada(String nombre) {
+    public TerminalGestionada(String nombre, EstrategiaMejorCircuito estrategia) {
         this.nombre = nombre;
         this.lineasNavieras = new ArrayList<Naviera>();
         this.gps = new GPS();
         this.viajes = new ArrayList<Viaje>();
         this.ordenes = new ArrayList<Orden>();
         this.clientes = new ArrayList<Cliente>();
+        this.camiones = new ArrayList<Camion>();
+        this.choferes = new ArrayList<Chofer>();
         this.empresas = new ArrayList<EmpresaTransportista>();
+        this.estrategia = estrategia;
     }
     
     public boolean consultarInicioDeTrabajo() {
@@ -156,6 +165,25 @@ public class TerminalGestionada {
                 .orElse(null); //Borrar despues
     }
     
+    // Proceso de exportación e importación.
+    
+	public void exportarA(TerminalGestionada terminalDestino, Camion camion, Chofer chofer, Container container, ClienteShipper cliente) {
+		clientes.add(cliente);
+		camiones.add(camion);
+		choferes.add(chofer);
+		// En la orden falta hacer bien lo del viaje, por ahora puse lo del viajeMasCorto() pero eso hay que borrarlo porque esta mal.
+		OrdenExportacion orden = new OrdenExportacion(container, this.viajeMasCorto(), camion, chofer, 
+				 this.viajeMasCorto().getFechaSalida(), this.viajeMasCorto().getFechaLlegada(), this.darNroDeOrden(), cliente);
+		orden.setServicios(container.getServiciosContratados());
+		this.asignarTurno(cliente, this.viajeMasCorto().getFechaSalida(), this.darNroDeOrden());
+		ordenes.add(orden);
+		cliente.agregarOrden(orden);
+	}
+
+	public void importarDe() {
+		
+	}
+    
     public int darNroDeOrden(){
     	return ordenes.size() + 1;
     }
@@ -165,37 +193,53 @@ public class TerminalGestionada {
     }
     
     //El turno siempre se asigna a las 9:00 AM del dia que el buque va a salir del puerto.
-    public void asignarTurno(ClienteShipper cliente, LocalDate fecha){
+    public void asignarTurno(ClienteShipper cliente, LocalDate fecha, int nroOrden){
     	LocalDateTime fechaConHora = fecha.atTime(9, 00);
-    	Turno turno = new Turno(fechaConHora);
-    	cliente.setTurno(turno);
+    	Turno turno = new Turno(fechaConHora, nroOrden);
+    	cliente.agregarTurno(turno);
     }
     
-    public void verificarCondicionesDeIngresoDe(ClienteShipper cliente, Camion camion, Reloj reloj) {
-    	if(this.verificarSiLlegoEnHorario(cliente, reloj) && this.verificarCamion(camion) && this.verificarChofer(camion.getChofer())) {
+    // El reloj es para controlar la hora actual, en los tests esta mockeado para que devuelva la hora que le pasamos.
+    public boolean verificarCondicionesDeIngresoDe(ClienteShipper cliente, Camion camion, Chofer chofer, Reloj reloj, int nroOrden) {
+    	if(this.verificarSiLlegoEnHorario(cliente, nroOrden, reloj) && this.verificarCamion(camion) && this.verificarChofer(chofer)) {
     		camion.descargarContainer();
 			System.out.println("Carga depositada");
+			return true;
     	}
 		else {
 			System.out.println("Se rechaza el ingreso porque no cumple alguna de las condiciones anteriores");
+			return false;
 		}
     }
     
-    public boolean verificarSiLlegoEnHorario(ClienteShipper cliente, Reloj reloj) {
-    	int diferenciaEnHoras = reloj.getHora() - cliente.getTurno().getHora();
-    	return !(diferenciaEnHoras > 3);
+    public boolean verificarSiLlegoEnHorario(ClienteShipper cliente, int nroOrden, Reloj reloj) {
+    	Turno turno = cliente.getTurnos().stream()
+    									 .filter(t -> t.getNroOrden() == (nroOrden))
+    									 .findFirst()
+    									 .orElseThrow(() -> new RuntimeException("No se encontró un turno con el nroOrden dado."));
+    	boolean estaElClienteEnLaOrden = ordenes.stream().anyMatch(orden -> orden.getCliente().equals(cliente));
+    	int diferenciaEnHoras = reloj.getHora() - turno.getHora();
+    	return !(diferenciaEnHoras > 3) && estaElClienteEnLaOrden && clientes.contains(cliente);
     }
         
     public boolean verificarCamion(Camion camion) {
-    	return ordenes.stream().anyMatch(orden -> orden.getCamion().equals(camion));
+    	return ordenes.stream().anyMatch(orden -> orden.getCamion().equals(camion)) && camiones.contains(camion);
     }
     
     public boolean verificarChofer(Chofer chofer) {
-    	return ordenes.stream().anyMatch(orden -> orden.getCamion().getChofer().equals(chofer));
+    	return ordenes.stream().anyMatch(orden -> orden.getChofer().equals(chofer)) && choferes.contains(chofer);
     }
     
-	public Circuito obtenerMejorCircuito(TerminalGestionada terminal) {
-		return null; //Terminar 
+	public Circuito obtenerMejorCircuitoParaLaTerminalDestino(TerminalGestionada terminalDestino) {
+		List<Circuito> todosLosCircuitos = lineasNavieras.stream()
+				                           .flatMap(ln -> ln.getCircuitos()
+				                           .stream()).toList();
+			
+		return estrategia.elegirMejorCircuito(todosLosCircuitos, terminalDestino);	
 	}
-    
+	
+	public void setEstrategia(EstrategiaMejorCircuito estrategia) {
+		this.estrategia = estrategia;
+	}
+
 }

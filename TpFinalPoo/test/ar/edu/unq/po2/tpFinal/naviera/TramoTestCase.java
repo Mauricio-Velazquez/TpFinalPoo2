@@ -17,7 +17,7 @@ public class TramoTestCase {
 	private Tramo tramo2; 
 
 	@BeforeEach
-	void setUp() {
+	public void setUp() {
 		terminal1 = mock(TerminalGestionada.class);
 		terminal2 = mock(TerminalGestionada.class);
 		terminal3 = mock(TerminalGestionada.class);
@@ -26,22 +26,22 @@ public class TramoTestCase {
 	}
 
 	@Test
-	void testTramoIncluyeTerminal() {
+	public void testTramoIncluyeTerminal() {
 		assertTrue(tramo1.incluyeTerminal(terminal1));
 	}
 
 	@Test
-	void testTramoNoIncluyeTerminal() {
+	public void testTramoNoIncluyeTerminal() {
 		assertFalse(tramo2.incluyeTerminal(terminal1));
 	}
 	
 	@Test
-	void testTramoIncluyeTerminalDestino() {
+	public void testTramoIncluyeTerminalDestino() {
 		assertTrue(tramo2.incluyeTerminalDestino(terminal3));
 	}
 	
 	@Test
-	void testTramoNoIncluyeTerminalDestino() {
+	public void testTramoNoIncluyeTerminalDestino() {
 		assertFalse(tramo2.incluyeTerminalDestino(terminal2));
 	}
 

@@ -5,14 +5,14 @@ import java.time.LocalDate;
 import ar.edu.unq.po2.tpFinal.cliente.Cliente;
 import ar.edu.unq.po2.tpFinal.container.Container;
 import ar.edu.unq.po2.tpFinal.empresaTransportista.Camion;
+import ar.edu.unq.po2.tpFinal.empresaTransportista.Chofer;
 import ar.edu.unq.po2.tpFinal.terminalGestionada.Viaje;
 
 public class OrdenExportacion extends Orden {
 
-	public OrdenExportacion(Container container, Viaje viaje, Camion camion, 
+	public OrdenExportacion(Container container, Viaje viaje, Camion camion, Chofer chofer, 
 			LocalDate fechaSalida, LocalDate fechaLlegada, int nroOrden, Cliente cliente) {
-		super(container, viaje, camion, fechaSalida, fechaLlegada, nroOrden, cliente);
-		// TODO Auto-generated constructor stub
+		super(container, viaje, camion, chofer, fechaSalida, fechaLlegada, nroOrden, cliente);
 	}
 
 	@Override

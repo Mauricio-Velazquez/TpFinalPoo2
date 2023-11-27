@@ -8,7 +8,6 @@ import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,8 +19,8 @@ import ar.edu.unq.po2.tpFinal.container.ContainerDry;
 import ar.edu.unq.po2.tpFinal.empresaTransportista.Camion;
 import ar.edu.unq.po2.tpFinal.empresaTransportista.Chofer;
 import ar.edu.unq.po2.tpFinal.naviera.Circuito;
+import ar.edu.unq.po2.tpFinal.naviera.EstrategiaMenorCosto;
 import ar.edu.unq.po2.tpFinal.naviera.Tramo;
-import ar.edu.unq.po2.tpFinal.servicio.Servicio;
 import ar.edu.unq.po2.tpFinal.terminalGestionada.Reloj;
 import ar.edu.unq.po2.tpFinal.terminalGestionada.TerminalGestionada;
 import ar.edu.unq.po2.tpFinal.terminalGestionada.Viaje;
@@ -51,7 +50,7 @@ public class OrdenTestCase {
 	
     @BeforeEach
     public void setUp() throws Exception{
-        terminal1 = new TerminalGestionada("TerminalTest");
+        terminal1 = new TerminalGestionada("TerminalTest", new EstrategiaMenorCosto());
 		terminal2 = mock(TerminalGestionada.class);
 		terminal3 = mock(TerminalGestionada.class);
 		terminal4 = mock(TerminalGestionada.class);
@@ -62,6 +61,7 @@ public class OrdenTestCase {
         container1 = mock(ContainerDry.class);
 		chofer1 = mock(Chofer.class);
 		camion1 = new Camion("AAA111", chofer1);
+		camion1.cargarContainer(container1);
 		buque1 = mock(Buque.class);
 		buque2 = mock(Buque.class);
 		
@@ -83,35 +83,40 @@ public class OrdenTestCase {
         viaje2 = new Viaje(LocalDate.of(2023, 11, 15), buque2, circuito2, LocalDate.of(2023, 11, 17));
         terminal1.agregarViaje(viaje1);
         terminal1.agregarViaje(viaje2);
-        
-        terminal1.registrarCliente(cliente1);
-        terminal1.registrarCliente(cliente2);
-        
-        cliente1.enviarOrden(terminal1, container1, camion1, new ArrayList<Servicio>());
+                
+        terminal1.exportarA(terminal3, camion1, chofer1, container1, cliente1);
         
     }
-    
+        
     @Test 
-    void verificarOrdenCargadaCorrectamente(){
+    public void testVerificarOrdenCargadaCorrectamente(){
 		assertEquals(terminal1.cantidadDeOrdenes(), 1);
 		assertEquals(terminal1.viajeMasCorto(), viaje2);
-		assertEquals(cliente1.getTurno().getFechaYHora(), LocalDateTime.of(2023, 11, 15, 9, 0));
+		assertTrue(cliente1.getTurnos().stream().anyMatch(turno -> turno.getFechaYHora().equals(LocalDateTime.of(2023, 11, 15, 9, 0))));
 	}
     
-    @Test 
-    void verificarSiElShipperLlegoEnLaHoraAsignada(){
+    @Test
+    public void testVerificarCondicionesDeIngresoDeUnShipper() {
 		reloj = mock(Reloj.class);
 		when(reloj.getHora()).thenReturn(11);
 		
-    	assertTrue(terminal1.verificarSiLlegoEnHorario(cliente1, reloj));
+    	assertTrue(terminal1.verificarCondicionesDeIngresoDe(cliente1, camion1, chofer1, reloj, 1));
+    }
+    
+    @Test 
+    public void testVerificarSiElShipperLlegoEnLaHoraAsignada(){
+		reloj = mock(Reloj.class);
+		when(reloj.getHora()).thenReturn(11);
+		
+    	assertTrue(terminal1.verificarSiLlegoEnHorario(cliente1, 1, reloj));
 	}
     
     @Test 
-    void elShipperNoLlegoEnLaHoraAsignada(){
+    public void testElShipperNoLlegoEnLaHoraAsignada(){
 		reloj = mock(Reloj.class);
 		when(reloj.getHora()).thenReturn(14);
 		
-    	assertFalse(terminal1.verificarSiLlegoEnHorario(cliente1, reloj));
+    	assertFalse(terminal1.verificarSiLlegoEnHorario(cliente1, 1, reloj));
 	}
     
 }

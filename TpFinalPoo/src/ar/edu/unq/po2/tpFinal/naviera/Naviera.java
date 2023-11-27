@@ -1,11 +1,9 @@
 package ar.edu.unq.po2.tpFinal.naviera;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 import ar.edu.unq.po2.tpFinal.buque.Buque;
-import ar.edu.unq.po2.tpFinal.terminalGestionada.TerminalGestionada;
 import ar.edu.unq.po2.tpFinal.terminalGestionada.Viaje;
 
 public class Naviera {
@@ -72,26 +70,5 @@ public class Naviera {
     public int getTiempoTotalEstimadoDeLosCircuitos() {
         return circuitos.stream().mapToInt(c -> c.getTiempoTotal()).sum();
     }
-	
-    // Para el strategy
-    public Circuito circuitoConMenorCantidadDeTramosConLaTerminal(TerminalGestionada terminalDestino) {
-    	return circuitos.stream()
-    			.filter(c -> c.incluyeTerminalDestino(terminalDestino))
-    			.min(Comparator.comparingInt(c -> c.cantidadDeTramosHasta(terminalDestino)))
-    			.orElseThrow(() -> new RuntimeException("No se encontró un circuito con la terminalDestino dada."));
-    }
-    
-    public Circuito circuitoConMenorCostoConLaTerminal(TerminalGestionada terminalDestino) {
-    	return circuitos.stream()
-    			.filter(c -> c.incluyeTerminalDestino(terminalDestino))
-    			.min(Comparator.comparingDouble(c -> c.costoHasta(terminalDestino)))
-    			.orElseThrow(() -> new RuntimeException("No se encontró un circuito con la terminalDestino dada."));
-    }
-    
-    public Circuito circuitoConMenorTiempoConLaTerminal(TerminalGestionada terminalDestino) {
-    	return circuitos.stream()
-    			.filter(c -> c.incluyeTerminalDestino(terminalDestino))
-    			.min(Comparator.comparingInt(c -> c.tiempoHasta(terminalDestino)))
-    			.orElseThrow(() -> new RuntimeException("No se encontró un circuito con la terminalDestino dada."));
-    }
+	    
 }
