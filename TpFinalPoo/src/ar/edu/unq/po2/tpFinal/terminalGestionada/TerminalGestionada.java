@@ -10,6 +10,7 @@ import ar.edu.unq.po2.tpFinal.empresaTransportista.Camion;
 import ar.edu.unq.po2.tpFinal.empresaTransportista.Chofer;
 import ar.edu.unq.po2.tpFinal.empresaTransportista.EmpresaTransportista;
 import ar.edu.unq.po2.tpFinal.filtro.Filtro;
+import ar.edu.unq.po2.tpFinal.filtro.FiltroPuertoDestino;
 import ar.edu.unq.po2.tpFinal.naviera.Circuito;
 import ar.edu.unq.po2.tpFinal.naviera.EstrategiaMejorCircuito;
 import ar.edu.unq.po2.tpFinal.naviera.Naviera;
@@ -29,7 +30,6 @@ public class TerminalGestionada {
 	private String nombre;
 	private GPS gps;
 	private List<Naviera> lineasNavieras;
-    private List<Viaje> viajes;
     private List<Orden> ordenes;
     private List<Cliente> clientes; // Para realizar validaciones de orden.
     private List<Camion> camiones;  // Para realizar validaciones de orden.
@@ -41,7 +41,6 @@ public class TerminalGestionada {
         this.nombre = nombre;
         this.lineasNavieras = new ArrayList<Naviera>();
         this.gps = new GPS();
-        this.viajes = new ArrayList<Viaje>();
         this.ordenes = new ArrayList<Orden>();
         this.clientes = new ArrayList<Cliente>();
         this.camiones = new ArrayList<Camion>();
@@ -149,33 +148,46 @@ public class TerminalGestionada {
         this.nombre = nombre;
     }
     
-    public void agregarViaje(Viaje viaje) {
-        viajes.add(viaje);
-    }
-
+    // Devuelve una lista de viajes con el filtro dado.
     public List<Viaje> obtenerViajesPorFiltro(Filtro filtro){
-    	 return viajes.stream()
+		List<Viaje> todosLosViajes = lineasNavieras.stream()
+                .flatMap(ln -> ln.getViajes()
+                .stream()).toList();
+    	
+    	 return todosLosViajes.stream()
                  .filter(filtro::cumpleFiltro)
                  .collect(Collectors.toList());
     }
     
-    public Viaje viajeMasCorto() {
-    	return viajes.stream()
-    			.min(Comparator.comparingInt(v -> v.getCircuito().getTiempoTotal()))
-                .orElse(null); //Borrar despues
+    // Devuelve el viaje con la terminalDestino dada y fecha de salida mas temprana.
+    public Viaje obtenerViajeConTerminalDestinoYFechaDeSalidaTemprana(TerminalGestionada terminalDestino){
+    	List<Viaje> viajesConLaTerminalDestino = obtenerViajesPorFiltro(new FiltroPuertoDestino(terminalDestino));
+    	Viaje viaje = viajeConFechaDeSalidaTemprana(viajesConLaTerminalDestino);
+    	
+   	    return viaje;
+   }
+   
+    // Devuelve el viaje con la fecha de salida mas temprana.
+    public Viaje viajeConFechaDeSalidaTemprana(List<Viaje> todosLosViajes) {
+    	
+    	return todosLosViajes.stream().min(Comparator.comparing(Viaje::getFechaSalida))
+    			                      .orElseThrow(() -> new RuntimeException("No se encontró un viaje"));
     }
-    
+        
     // Proceso de exportación e importación.
     
+    // Al cliente siempre se le da el viaje con la fecha de salida mas temprana.
 	public void exportarA(TerminalGestionada terminalDestino, Camion camion, Chofer chofer, Container container, ClienteShipper cliente) {
 		clientes.add(cliente);
 		camiones.add(camion);
 		choferes.add(chofer);
-		// En la orden falta hacer bien lo del viaje, por ahora puse lo del viajeMasCorto() pero eso hay que borrarlo porque esta mal.
-		OrdenExportacion orden = new OrdenExportacion(container, this.viajeMasCorto(), camion, chofer, 
-				 this.viajeMasCorto().getFechaSalida(), this.viajeMasCorto().getFechaLlegada(), this.darNroDeOrden(), cliente);
+
+		OrdenExportacion orden = new OrdenExportacion(container, this.obtenerViajeConTerminalDestinoYFechaDeSalidaTemprana(terminalDestino), camion, chofer, 
+																 this.obtenerViajeConTerminalDestinoYFechaDeSalidaTemprana(terminalDestino).getFechaSalida(), 
+																 this.obtenerViajeConTerminalDestinoYFechaDeSalidaTemprana(terminalDestino).getFechaLlegada(), 
+																 this.darNroDeOrden(), cliente);
 		orden.setServicios(container.getServiciosContratados());
-		this.asignarTurno(cliente, this.viajeMasCorto().getFechaSalida(), this.darNroDeOrden());
+		this.asignarTurno(cliente, this.obtenerViajeConTerminalDestinoYFechaDeSalidaTemprana(terminalDestino).getFechaSalida(), this.darNroDeOrden());
 		ordenes.add(orden);
 		cliente.agregarOrden(orden);
 	}
@@ -192,7 +204,7 @@ public class TerminalGestionada {
     	return ordenes.size();
     }
     
-    //El turno siempre se asigna a las 9:00 AM del dia que el buque va a salir del puerto.
+    // El turno siempre se asigna a las 9:00 AM del dia que el buque va a salir del puerto.
     public void asignarTurno(ClienteShipper cliente, LocalDate fecha, int nroOrden){
     	LocalDateTime fechaConHora = fecha.atTime(9, 00);
     	Turno turno = new Turno(fechaConHora, nroOrden);

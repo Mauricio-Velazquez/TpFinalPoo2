@@ -20,6 +20,7 @@ import ar.edu.unq.po2.tpFinal.empresaTransportista.Camion;
 import ar.edu.unq.po2.tpFinal.empresaTransportista.Chofer;
 import ar.edu.unq.po2.tpFinal.naviera.Circuito;
 import ar.edu.unq.po2.tpFinal.naviera.EstrategiaMenorCosto;
+import ar.edu.unq.po2.tpFinal.naviera.Naviera;
 import ar.edu.unq.po2.tpFinal.naviera.Tramo;
 import ar.edu.unq.po2.tpFinal.terminalGestionada.Reloj;
 import ar.edu.unq.po2.tpFinal.terminalGestionada.TerminalGestionada;
@@ -30,6 +31,7 @@ public class OrdenTestCase {
 	private TerminalGestionada terminal2;
 	private TerminalGestionada terminal3;
 	private TerminalGestionada terminal4;
+	private Naviera naviera;
 	private ClienteShipper cliente1;
 	private ClienteConsignee cliente2;
 	private ContainerDry container1;
@@ -54,6 +56,8 @@ public class OrdenTestCase {
 		terminal2 = mock(TerminalGestionada.class);
 		terminal3 = mock(TerminalGestionada.class);
 		terminal4 = mock(TerminalGestionada.class);
+		
+		naviera = new Naviera("NavieraTest");
         
         cliente1 = new ClienteShipper("Nestor", 14456546, "nestor@gmail.com");
         cliente2 = new ClienteConsignee("Alfredo", 13746249, "alfredo@gmail.com");
@@ -68,7 +72,6 @@ public class OrdenTestCase {
 		tramo1 = new Tramo(terminal1, terminal2, 500d, 70);
 		tramo2 = new Tramo(terminal2, terminal3, 300d, 30);
 		tramo3 = new Tramo(terminal3, terminal4, 400d, 40);
-	
 		tramo4 = new Tramo(terminal1, terminal2, 900d, 10);
 		tramo5 = new Tramo(terminal2, terminal4, 600d, 40);
 		
@@ -76,13 +79,22 @@ public class OrdenTestCase {
 		circuito1.agregarTramo(tramo1);
 		circuito1.agregarTramo(tramo2);
 		circuito1.agregarTramo(tramo3);
+		
 		circuito2 = new Circuito();
 		circuito2.agregarTramo(tramo4);
 		circuito2.agregarTramo(tramo5);
+		
         viaje1 = new Viaje(LocalDate.of(2023, 11, 15), buque1, circuito1, LocalDate.of(2023, 11, 19));
         viaje2 = new Viaje(LocalDate.of(2023, 11, 15), buque2, circuito2, LocalDate.of(2023, 11, 17));
-        terminal1.agregarViaje(viaje1);
-        terminal1.agregarViaje(viaje2);
+        
+        naviera.agregarBuque(buque1);
+        naviera.agregarBuque(buque2);
+        naviera.agregarCircuito(circuito1);
+        naviera.agregarCircuito(circuito2);
+        naviera.agregarViaje(viaje1);
+        naviera.agregarViaje(viaje2);
+        
+        terminal1.registrarLineaNaviera(naviera);
                 
         terminal1.exportarA(terminal3, camion1, chofer1, container1, cliente1);
         
@@ -91,7 +103,7 @@ public class OrdenTestCase {
     @Test 
     public void testVerificarOrdenCargadaCorrectamente(){
 		assertEquals(terminal1.cantidadDeOrdenes(), 1);
-		assertEquals(terminal1.viajeMasCorto(), viaje2);
+		assertEquals(terminal1.obtenerViajeConTerminalDestinoYFechaDeSalidaTemprana(terminal3), viaje1);
 		assertTrue(cliente1.getTurnos().stream().anyMatch(turno -> turno.getFechaYHora().equals(LocalDateTime.of(2023, 11, 15, 9, 0))));
 	}
     
