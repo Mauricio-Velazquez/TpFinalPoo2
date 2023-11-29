@@ -4,6 +4,7 @@ import ar.edu.unq.po2.tpFinal.buque.Buque;
 import ar.edu.unq.po2.tpFinal.buque.GPS;
 import ar.edu.unq.po2.tpFinal.buque.Posicion;
 import ar.edu.unq.po2.tpFinal.cliente.Cliente;
+import ar.edu.unq.po2.tpFinal.cliente.ClienteConsignee;
 import ar.edu.unq.po2.tpFinal.cliente.ClienteShipper;
 import ar.edu.unq.po2.tpFinal.container.Container;
 import ar.edu.unq.po2.tpFinal.empresaTransportista.Camion;
@@ -16,6 +17,7 @@ import ar.edu.unq.po2.tpFinal.naviera.EstrategiaMejorCircuito;
 import ar.edu.unq.po2.tpFinal.naviera.Naviera;
 import ar.edu.unq.po2.tpFinal.orden.Orden;
 import ar.edu.unq.po2.tpFinal.orden.OrdenExportacion;
+import ar.edu.unq.po2.tpFinal.orden.OrdenImportacion;
 import ar.edu.unq.po2.tpFinal.servicio.Servicio;
 
 import java.time.LocalDate;
@@ -191,10 +193,31 @@ public class TerminalGestionada {
 		ordenes.add(orden);
 		cliente.agregarOrden(orden);
 	}
+	
+	public void importar(Camion camion, Chofer chofer, Container container, ClienteConsignee cliente, OrdenExportacion ordenExp) {
+        clientes.add(cliente);
+        camiones.add(camion);
+        choferes.add(chofer);
+        Viaje viaje = ordenExp.getViaje();
 
-	public void importarDe() {
-		
-	}
+        OrdenImportacion orden = new OrdenImportacion(container, viaje, camion, chofer, 
+                                                                 viaje.getFechaSalida(), 
+                                                                 viaje.getFechaLlegada(), 
+                                                                 this.darNroDeOrden(), cliente);
+        orden.setServicios(container.getServiciosContratados());
+        ordenes.add(orden);
+        cliente.agregarOrden(orden);
+        this.enviarCorreoConFechaLlegadaConMargen(orden.getFechaLlegada(),cliente);
+    }
+	
+	public void enviarCorreoConFechaLlegadaConMargen(LocalDate fechaLlegada, ClienteConsignee consignee) {
+        
+        LocalDate fechaLimiteRetiro = fechaLlegada.plusDays(24);
+
+        String mensaje = "Su carga llegará el " + fechaLlegada + ". Tiene hasta el " + fechaLimiteRetiro + " para retirarla.";
+
+        enviarCorreoConsignee(consignee, mensaje);
+    }
     
     public int darNroDeOrden(){
     	return ordenes.size() + 1;
