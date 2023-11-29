@@ -22,6 +22,6 @@ public class FaseDeBuqueInbound implements FaseDeBuque {
 
 	@Override
 	public void notificarTerminal(Buque buque,TerminalGestionada terminal) {
-		terminal.notificarCliente(buque);;
+		terminal.notificarCliente(buque);
 	}
 }

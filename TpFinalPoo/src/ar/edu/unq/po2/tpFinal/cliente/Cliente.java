@@ -42,6 +42,10 @@ public abstract class Cliente {
 		System.out.println("Se recibio la factura" + factura);
 	}
 	
+	public void recibirEmail(String mensaje) {
+		System.out.println("Se recibio un Email: "+mensaje);
+	}
+	
 	public void agregarOrden(Orden orden){
 		ordenes.add(orden);
 	}

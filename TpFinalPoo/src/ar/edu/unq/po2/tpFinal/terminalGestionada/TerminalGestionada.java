@@ -82,7 +82,7 @@ public class TerminalGestionada {
     private void enviarCorreoConsignee(Cliente cliente, String mensaje) {
         // Lógica para enviar el correo al consignee
         // ...
-        System.out.println("Correo enviado a " + cliente.getNombre() + ": " + mensaje);
+        cliente.recibirEmail(mensaje);
     }
     
     public String generarFacturaViajeYServicios(Buque buque, String responsablePago) {
