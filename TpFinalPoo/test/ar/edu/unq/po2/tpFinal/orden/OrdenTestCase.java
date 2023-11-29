@@ -39,6 +39,8 @@ public class OrdenTestCase {
 	private Viaje viaje2;
 	private Camion camion1;
 	private Chofer chofer1;
+	private Camion camion2;
+	private Chofer chofer2;
 	private Buque buque1;
 	private Buque buque2;
 	private Circuito circuito1;
@@ -49,6 +51,7 @@ public class OrdenTestCase {
 	private Tramo tramo4;
 	private Tramo tramo5;
 	private Reloj reloj;
+	private OrdenExportacion ordenExp;
 	
     @BeforeEach
     public void setUp() throws Exception{
@@ -68,6 +71,9 @@ public class OrdenTestCase {
 		camion1.cargarContainer(container1);
 		buque1 = mock(Buque.class);
 		buque2 = mock(Buque.class);
+		
+		chofer2 = mock(Chofer.class);
+		camion2 = new Camion("BBB333", chofer2);
 		
 		tramo1 = new Tramo(terminal1, terminal2, 500d, 70);
 		tramo2 = new Tramo(terminal2, terminal3, 300d, 30);
@@ -98,6 +104,10 @@ public class OrdenTestCase {
                 
         terminal1.exportarA(terminal3, camion1, chofer1, container1, cliente1);
         
+        ordenExp = new OrdenExportacion(container1, viaje1, camion1, chofer1, viaje1.getFechaSalida(), viaje1.getFechaLlegada(), 1, cliente1);
+        
+        terminal3.importar(camion2, chofer2, container1, cliente2, ordenExp);
+        
     }
         
     @Test 
@@ -112,7 +122,7 @@ public class OrdenTestCase {
 		reloj = mock(Reloj.class);
 		when(reloj.getHora()).thenReturn(11);
 		
-    	assertTrue(terminal1.verificarCondicionesDeIngresoDe(cliente1, camion1, chofer1, reloj, 1));
+    	assertTrue(terminal1.verificarCondicionesDeIngresoDelShipper(cliente1, camion1, chofer1, reloj, 1));
     }
     
     @Test 
@@ -120,7 +130,7 @@ public class OrdenTestCase {
 		reloj = mock(Reloj.class);
 		when(reloj.getHora()).thenReturn(11);
 		
-    	assertTrue(terminal1.verificarSiLlegoEnHorario(cliente1, 1, reloj));
+    	assertTrue(terminal1.verificarSiLlegoEnHorarioElShipper(cliente1, 1, reloj));
 	}
     
     @Test 
@@ -128,7 +138,7 @@ public class OrdenTestCase {
 		reloj = mock(Reloj.class);
 		when(reloj.getHora()).thenReturn(14);
 		
-    	assertFalse(terminal1.verificarSiLlegoEnHorario(cliente1, 1, reloj));
+    	assertFalse(terminal1.verificarSiLlegoEnHorarioElShipper(cliente1, 1, reloj));
 	}
     
 }

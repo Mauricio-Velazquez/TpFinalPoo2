@@ -1,5 +1,6 @@
 package ar.edu.unq.po2.tpFinal.terminalGestionada;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class Reloj {
@@ -15,5 +16,9 @@ public class Reloj {
 	
 	public int getHora() {
 		return fechaYHora.getHour();
+	}
+	
+	public LocalDate getFecha() {
+		return fechaYHora.toLocalDate();
 	}
 }

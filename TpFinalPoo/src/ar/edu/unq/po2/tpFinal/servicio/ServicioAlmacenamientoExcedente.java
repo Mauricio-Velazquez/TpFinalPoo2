@@ -4,8 +4,7 @@ public class ServicioAlmacenamientoExcedente implements Servicio {
 	private double costoPorDia;
     private int diasAlmacenados;
 
-    public ServicioAlmacenamientoExcedente(double costoPorDia,
-    		int diasAlmacenados) {
+    public ServicioAlmacenamientoExcedente(double costoPorDia) {
         this.costoPorDia = costoPorDia;
         this.diasAlmacenados = 0; // Inicialmente, no hay días almacenados
     }
@@ -14,7 +13,6 @@ public class ServicioAlmacenamientoExcedente implements Servicio {
     public void setDiasAlmacenados(int diasAlmacenados) {
         this.diasAlmacenados = diasAlmacenados;
     }
-
 
     @Override
     public double getCosto() {

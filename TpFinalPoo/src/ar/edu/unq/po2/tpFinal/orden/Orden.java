@@ -110,5 +110,9 @@ public abstract class Orden {
 	public void setServicios(List<Servicio> servicios) {
 		this.servicios = servicios;
 	}
+	
+	public void agregarServicio(Servicio servicio) {
+		servicios.add(servicio);
+	}
 
 }

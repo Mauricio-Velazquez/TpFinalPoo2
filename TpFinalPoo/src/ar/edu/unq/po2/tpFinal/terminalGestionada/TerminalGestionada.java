@@ -19,9 +19,11 @@ import ar.edu.unq.po2.tpFinal.orden.Orden;
 import ar.edu.unq.po2.tpFinal.orden.OrdenExportacion;
 import ar.edu.unq.po2.tpFinal.orden.OrdenImportacion;
 import ar.edu.unq.po2.tpFinal.servicio.Servicio;
+import ar.edu.unq.po2.tpFinal.servicio.ServicioAlmacenamientoExcedente;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -37,6 +39,7 @@ public class TerminalGestionada {
     private List<Camion> camiones;  // Para realizar validaciones de orden.
     private List<Chofer> choferes;  // Para realizar validaciones de orden.
     private List<EmpresaTransportista> empresas;
+    private List<Container> containers;  // Para la exportación e importación.
     private EstrategiaMejorCircuito estrategia;
     
     public TerminalGestionada(String nombre, EstrategiaMejorCircuito estrategia) {
@@ -48,6 +51,7 @@ public class TerminalGestionada {
         this.camiones = new ArrayList<Camion>();
         this.choferes = new ArrayList<Chofer>();
         this.empresas = new ArrayList<EmpresaTransportista>();
+        this.containers = new ArrayList<Container>();
         this.estrategia = estrategia;
     }
     
@@ -137,7 +141,15 @@ public class TerminalGestionada {
     public void registrarEmpresaTransportista(EmpresaTransportista empresa) {
     	empresas.add(empresa);
     }
+    
+    public void agregarContainer(Container container) {
+    	containers.add(container);
+    }
 
+    public void retirarContainer(Container container) {
+    	containers.remove(container);
+    }
+    
     public String getNombre() {
         return nombre;
     }
@@ -183,13 +195,14 @@ public class TerminalGestionada {
 		clientes.add(cliente);
 		camiones.add(camion);
 		choferes.add(chofer);
+		Viaje viajeMasTemprano = this.obtenerViajeConTerminalDestinoYFechaDeSalidaTemprana(terminalDestino);
 
-		OrdenExportacion orden = new OrdenExportacion(container, this.obtenerViajeConTerminalDestinoYFechaDeSalidaTemprana(terminalDestino), camion, chofer, 
-																 this.obtenerViajeConTerminalDestinoYFechaDeSalidaTemprana(terminalDestino).getFechaSalida(), 
-																 this.obtenerViajeConTerminalDestinoYFechaDeSalidaTemprana(terminalDestino).getFechaLlegada(), 
+		OrdenExportacion orden = new OrdenExportacion(container, viajeMasTemprano, camion, chofer, 
+																 viajeMasTemprano.getFechaSalida(), 
+																 viajeMasTemprano.getFechaLlegada(), 
 																 this.darNroDeOrden(), cliente);
 		orden.setServicios(container.getServiciosContratados());
-		this.asignarTurno(cliente, this.obtenerViajeConTerminalDestinoYFechaDeSalidaTemprana(terminalDestino).getFechaSalida(), this.darNroDeOrden());
+		this.asignarTurno(cliente, viajeMasTemprano.getFechaSalida(), this.darNroDeOrden());
 		ordenes.add(orden);
 		cliente.agregarOrden(orden);
 	}
@@ -207,16 +220,17 @@ public class TerminalGestionada {
         orden.setServicios(container.getServiciosContratados());
         ordenes.add(orden);
         cliente.agregarOrden(orden);
-        this.enviarCorreoConFechaLlegadaConMargen(orden.getFechaLlegada(),cliente);
+        this.enviarCorreoConFechaLlegadaConMargen(orden.getFechaLlegada(), cliente);
     }
 	
-	public void enviarCorreoConFechaLlegadaConMargen(LocalDate fechaLlegada, ClienteConsignee consignee) {
-        
-        LocalDate fechaLimiteRetiro = fechaLlegada.plusDays(24);
+	// Suponemos que todas las importanciones llegan a las 11:00 AM entonces el consignee tiene hasta las 11:00 AM del otro dia para buscar la carga.
+	public void enviarCorreoConFechaLlegadaConMargen(LocalDate fechaLlegada, ClienteConsignee cliente) {
+		LocalDateTime fechaLlegadaConHora = fechaLlegada.atTime(11, 00);
+		LocalDateTime fechaLimiteRetiroConHora = fechaLlegadaConHora.plusDays(1);
 
-        String mensaje = "Su carga llegará el " + fechaLlegada + ". Tiene hasta el " + fechaLimiteRetiro + " para retirarla.";
+        String mensaje = "Su carga llegará el " + fechaLlegadaConHora + ". Tiene hasta el " + fechaLimiteRetiroConHora + " para retirarla o se le cobrara un extra.";
 
-        enviarCorreoConsignee(consignee, mensaje);
+        enviarCorreoConsignee(cliente, mensaje);
     }
     
     public int darNroDeOrden(){
@@ -235,8 +249,9 @@ public class TerminalGestionada {
     }
     
     // El reloj es para controlar la hora actual, en los tests esta mockeado para que devuelva la hora que le pasamos.
-    public boolean verificarCondicionesDeIngresoDe(ClienteShipper cliente, Camion camion, Chofer chofer, Reloj reloj, int nroOrden) {
-    	if(this.verificarSiLlegoEnHorario(cliente, nroOrden, reloj) && this.verificarCamion(camion) && this.verificarChofer(chofer)) {
+    public boolean verificarCondicionesDeIngresoDelShipper(ClienteShipper cliente, Camion camion, Chofer chofer, Reloj reloj, int nroOrden) {
+    	if(this.verificarSiLlegoEnHorarioElShipper(cliente, nroOrden, reloj) && this.verificarCamion(camion) && this.verificarChofer(chofer)) {
+    		containers.add(camion.getContainerCargado());
     		camion.descargarContainer();
 			System.out.println("Carga depositada");
 			return true;
@@ -247,14 +262,14 @@ public class TerminalGestionada {
 		}
     }
     
-    public boolean verificarSiLlegoEnHorario(ClienteShipper cliente, int nroOrden, Reloj reloj) {
+    public boolean verificarSiLlegoEnHorarioElShipper(ClienteShipper cliente, int nroOrden, Reloj reloj) {
     	Turno turno = cliente.getTurnos().stream()
     									 .filter(t -> t.getNroOrden() == (nroOrden))
     									 .findFirst()
     									 .orElseThrow(() -> new RuntimeException("No se encontró un turno con el nroOrden dado."));
-    	boolean estaElClienteEnLaOrden = ordenes.stream().anyMatch(orden -> orden.getCliente().equals(cliente));
+
     	int diferenciaEnHoras = reloj.getHora() - turno.getHora();
-    	return !(diferenciaEnHoras > 3) && estaElClienteEnLaOrden && clientes.contains(cliente);
+    	return !(diferenciaEnHoras > 3) && verificarCliente(cliente);
     }
         
     public boolean verificarCamion(Camion camion) {
@@ -263,6 +278,42 @@ public class TerminalGestionada {
     
     public boolean verificarChofer(Chofer chofer) {
     	return ordenes.stream().anyMatch(orden -> orden.getChofer().equals(chofer)) && choferes.contains(chofer);
+    }
+    
+    public boolean verificarCliente(Cliente cliente) {    	
+    	return ordenes.stream().anyMatch(orden -> orden.getCliente().equals(cliente)) && clientes.contains(cliente);
+    }
+    
+    // Si el Consignee se demora mas de 24 hs en buscar su carga se le cobra un monto fijo adicional por dia.
+    public void verificarCondicionesDeIngresoDelConsignee(ClienteConsignee cliente, Camion camion, Chofer chofer, Reloj reloj, int nroOrden) {
+    	Orden orden = ordenes.stream()
+    						 .filter(o -> o.getNroOrden() == (nroOrden))
+    						 .findFirst()
+    						 .orElseThrow(() -> new RuntimeException("No se encontró una orden con el nroOrden dado."));
+    	Container container = orden.getContainer();
+    	
+    	if(this.verificarSiLlegoEnHorarioElConsignee(cliente, orden, reloj) && this.verificarCamion(camion) && this.verificarChofer(chofer)) {
+    		camion.cargarContainer(container);
+    		containers.remove(container);
+    	}
+		else if(verificarCliente(cliente) && this.verificarCamion(camion) && this.verificarChofer(chofer)) {
+			LocalDate fechaInicial = orden.getFechaLlegada();
+			int diasAlmacenados = Math.toIntExact(ChronoUnit.DAYS.between(fechaInicial, reloj.getFecha()));
+			ServicioAlmacenamientoExcedente servicio = new ServicioAlmacenamientoExcedente(200d);
+			servicio.setDiasAlmacenados(diasAlmacenados);
+			orden.agregarServicio(servicio);
+    		camion.cargarContainer(container);
+    		containers.remove(container);
+		}
+    }
+    
+    // Verifica si el Consignee llego dentro de las 24 hs.
+    public boolean verificarSiLlegoEnHorarioElConsignee(ClienteConsignee cliente, Orden orden, Reloj reloj) {    	
+		LocalDateTime fechaInicial = orden.getFechaLlegada().atTime(11, 00);
+		LocalDateTime fechaLimite = fechaInicial.plusDays(1);
+		LocalDateTime fechaActual = reloj.getFechaYHora();
+
+    	return fechaActual.isBefore(fechaLimite) && verificarCliente(cliente);
     }
     
 	public Circuito obtenerMejorCircuitoParaLaTerminalDestino(TerminalGestionada terminalDestino) {
