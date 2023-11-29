@@ -299,8 +299,7 @@ public class TerminalGestionada {
 		else if(verificarCliente(cliente) && this.verificarCamion(camion) && this.verificarChofer(chofer)) {
 			LocalDate fechaInicial = orden.getFechaLlegada();
 			int diasAlmacenados = Math.toIntExact(ChronoUnit.DAYS.between(fechaInicial, reloj.getFecha()));
-			ServicioAlmacenamientoExcedente servicio = new ServicioAlmacenamientoExcedente(200d);
-			servicio.setDiasAlmacenados(diasAlmacenados);
+			ServicioAlmacenamientoExcedente servicio = new ServicioAlmacenamientoExcedente(200d, diasAlmacenados);
 			orden.agregarServicio(servicio);
     		camion.cargarContainer(container);
     		containers.remove(container);
@@ -327,5 +326,17 @@ public class TerminalGestionada {
 	public void setEstrategia(EstrategiaMejorCircuito estrategia) {
 		this.estrategia = estrategia;
 	}
-
+	
+	// Si el resultado es 0 es porque no existe la naviera dada en la terminalGestionada o la naviera no incluye la terminalDestino dada en sus viajes.
+	public int cuantoTardaEnLlegar(Naviera naviera, TerminalGestionada terminalDestino) {
+		int resultado = 0;
+		if(lineasNavieras.contains(naviera) && naviera.incluyeTerminalDestinoEnLosViajes(terminalDestino)) {
+			Viaje viaje = naviera.getViajes().stream()
+							     .min(Comparator.comparingInt(Viaje::getTiempoTotal))
+							     .orElseThrow(() -> new RuntimeException("No se encontró un viaje"));
+			resultado = viaje.getTiempoTotal();	
+		}
+		return resultado;
+	}
+	
 }

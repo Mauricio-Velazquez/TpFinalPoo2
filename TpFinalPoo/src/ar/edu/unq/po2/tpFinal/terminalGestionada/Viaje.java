@@ -45,4 +45,9 @@ public class Viaje {
     public void setCircuito(Circuito circuito) {
         this.circuito = circuito;
     }
+    
+	// Calcula y devuelve el tiempo total en horas del circuito.
+	public int getTiempoTotal() {
+		return circuito.getTiempoTotal();
+	}
 }

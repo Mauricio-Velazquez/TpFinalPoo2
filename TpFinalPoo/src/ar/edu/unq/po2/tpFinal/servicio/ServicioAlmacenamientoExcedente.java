@@ -4,14 +4,9 @@ public class ServicioAlmacenamientoExcedente implements Servicio {
 	private double costoPorDia;
     private int diasAlmacenados;
 
-    public ServicioAlmacenamientoExcedente(double costoPorDia) {
+    public ServicioAlmacenamientoExcedente(double costoPorDia, int diasAlmacenados) {
         this.costoPorDia = costoPorDia;
-        this.diasAlmacenados = 0; // Inicialmente, no hay días almacenados
-    }
-
-    // Método para establecer la cantidad de días almacenados
-    public void setDiasAlmacenados(int diasAlmacenados) {
-        this.diasAlmacenados = diasAlmacenados;
+        this.diasAlmacenados = diasAlmacenados; 
     }
 
     @Override

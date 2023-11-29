@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ar.edu.unq.po2.tpFinal.buque.Buque;
+import ar.edu.unq.po2.tpFinal.terminalGestionada.TerminalGestionada;
 import ar.edu.unq.po2.tpFinal.terminalGestionada.Viaje;
 
 public class Naviera {
@@ -66,9 +67,9 @@ public class Naviera {
 		this.buques = buques;
 	}
 	
-	// Calcula y devuelve el tiempo total en horas de todos los circuitos.
-    public int getTiempoTotalEstimadoDeLosCircuitos() {
-        return circuitos.stream().mapToInt(c -> c.getTiempoTotal()).sum();
-    }
+	// Indica si la terminal dada aparece como terminalDestino en alguno de los viajes.	
+	public boolean incluyeTerminalDestinoEnLosViajes(TerminalGestionada terminal) {
+		return viajes.stream().anyMatch(v -> v.getCircuito().incluyeTerminalDestino(terminal));
+	}
 	    
 }
