@@ -102,7 +102,7 @@ public class TerminalGestionada {
 
     private String generarFactura(String responsablePago, double montoTotalServicios
     		, List<Servicio> servicios) {
-    	return "Factura generada para " + responsablePago + ". Total a pagar por servicios: $" + montoTotalServicios;
+    	return "Factura generada para " + responsablePago + ". Total a pagar por servicios: $" + montoTotalServicios+" deglose de servicios "+servicios;
     }
 
     public void enviarFacturaPorEmail(Buque buque,TerminalGestionada terminal) {
