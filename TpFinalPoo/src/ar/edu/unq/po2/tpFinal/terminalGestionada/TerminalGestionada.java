@@ -27,7 +27,6 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class TerminalGestionada {
@@ -80,8 +79,6 @@ public class TerminalGestionada {
     }
 
     private void enviarCorreoConsignee(Cliente cliente, String mensaje) {
-        // Lógica para enviar el correo al consignee
-        // ...
         cliente.recibirEmail(mensaje);
     }
     
@@ -106,17 +103,16 @@ public class TerminalGestionada {
     }
 
     public void enviarFacturaPorEmail(Buque buque,TerminalGestionada terminal) {
-    	/*
-    	 * siempre habrá una única orden asociada al buque y
-    	 * esa orden contendrá al cliente responsable del pago
-    	 * */
-    	Optional<Orden> ordenBuscada = ordenes.stream()
-                .filter(orden -> orden.getViaje().getBuque().equals(buque))
-                .findFirst();
-    	ordenBuscada.ifPresent(orden -> {
-    		Cliente buscado = orden.getCliente();
-    		buscado.recibirFactura(generarFacturaViajeYServicios(buque,(buscado.getNombre())));
-    	});
+    
+    	List<Orden> ordenesBuscadas = ordenes.stream()
+                .filter(orden -> orden.getViaje().getBuque().equals(buque)).toList();
+    	
+    	// Recorrer cada orden buscada y enviar la factura al cliente asociado
+        ordenesBuscadas.forEach(orden -> {
+            Cliente clienteResponsablePago = orden.getCliente();
+            clienteResponsablePago.recibirFactura(generarFacturaViajeYServicios(buque, clienteResponsablePago.getNombre()));
+        });
+    	
     	
     }
     
