@@ -3,7 +3,7 @@ package ar.edu.unq.po2.tpFinal.container;
 public class ContainerReefer extends Container {
 	private double consumoDeEnergia;
 	
-	public ContainerReefer(int id, double ancho, double largo, double altura, double pesoTotal,double consumoDeEnergia) {
+	public ContainerReefer(int id, double ancho, double largo, double altura, double pesoTotal, double consumoDeEnergia) {
 		super(id, ancho, largo, altura, pesoTotal);
 		this.consumoDeEnergia = consumoDeEnergia;
 	}
@@ -12,8 +12,4 @@ public class ContainerReefer extends Container {
 		return consumoDeEnergia;
 	}
 	
-	public void setConsumoDeEnergia(double consumoDeEnergia) {
-		this.consumoDeEnergia = consumoDeEnergia;
-	}
-
 }

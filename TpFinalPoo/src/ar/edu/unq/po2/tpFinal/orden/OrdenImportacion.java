@@ -15,16 +15,4 @@ public class OrdenImportacion extends Orden {
 		super(container, viaje, camion, chofer, fechaSalida, fechaLlegada, nroOrden, cliente);
 	}
 
-	@Override
-	public void realizarOperacion() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public boolean verificarCondiciones() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-	
 }

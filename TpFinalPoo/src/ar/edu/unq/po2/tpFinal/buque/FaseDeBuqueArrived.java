@@ -3,6 +3,7 @@ package ar.edu.unq.po2.tpFinal.buque;
 import ar.edu.unq.po2.tpFinal.terminalGestionada.TerminalGestionada;
 
 public class FaseDeBuqueArrived implements FaseDeBuque {
+	
 	@Override
 	public void siguienteFase(Buque buque) {
 		buque.setEstadoActual(new FaseDeBuqueWorking());
@@ -11,7 +12,7 @@ public class FaseDeBuqueArrived implements FaseDeBuque {
 
 	@Override
 	public boolean deberiaCambiar(Buque buque,TerminalGestionada terminal ){
-		//terminal simbre lista para descarga
+		//terminal siempre lista para descarga
 		return terminal.consultarInicioDeTrabajo();
 	}
 	

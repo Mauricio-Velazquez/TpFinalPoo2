@@ -12,14 +12,12 @@ public class ServicioElectricidad implements Servicio {
     private LocalDateTime finConexion;
     private ContainerReefer container;
 
-    public ServicioElectricidad(double costoPorKw, double consumoKwHora,ContainerReefer container,
-    		LocalDateTime inicioConexion,LocalDateTime finConexion) {
+    public ServicioElectricidad(double costoPorKw, ContainerReefer container, LocalDateTime inicioConexion, LocalDateTime finConexion) {
        
         this.costoPorKw = costoPorKw;
         this.inicioConexion = inicioConexion;
         this.finConexion = finConexion;
         this.container = container;
-        
     }
 
     @Override

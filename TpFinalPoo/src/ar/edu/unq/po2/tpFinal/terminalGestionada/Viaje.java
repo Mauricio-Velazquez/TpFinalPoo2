@@ -26,24 +26,12 @@ public class Viaje {
         return fechaLlegada;
     }
 
-    public void setFechaSalida(LocalDate fechaSalida) {
-        this.fechaSalida = fechaSalida;
-    }
-
     public Buque getBuque() {
         return buque;
     }
 
-    public void setBuque(Buque buque) {
-        this.buque = buque;
-    }
-
     public Circuito getCircuito() {
         return circuito;
-    }
-
-    public void setCircuito(Circuito circuito) {
-        this.circuito = circuito;
     }
     
 	// Calcula y devuelve el tiempo total en horas del circuito.

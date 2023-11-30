@@ -39,32 +39,16 @@ public class Naviera {
 		return viajes;
 	}
 
-	public void setViajes(List<Viaje> viajes) {
-		this.viajes = viajes;
-	}
-
 	public String getNombre() {
 		return nombre;
-	}
-
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
 	}
 
 	public List<Circuito> getCircuitos() {
 		return circuitos;
 	}
 
-	public void setCircuitos(List<Circuito> circuitos) {
-		this.circuitos = circuitos;
-	}
-
 	public List<Buque> getBuques() {
 		return buques;
-	}
-
-	public void setBuques(List<Buque> buques) {
-		this.buques = buques;
 	}
 	
 	// Indica si la terminal dada aparece como terminalDestino en alguno de los viajes.	

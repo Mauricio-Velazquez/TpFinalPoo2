@@ -26,26 +26,12 @@ public class EmpresaTransportista {
 		return nombre;
 	}
 
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
-	}
-
 	public List<Camion> getCamiones() {
 		return camiones;
-	}
-
-	public void setCamiones(List<Camion> camiones) {
-		this.camiones = camiones;
 	}
 
 	public List<Chofer> getChoferes() {
 		return choferes;
 	}
-
-	public void setChoferes(List<Chofer> choferes) {
-		this.choferes = choferes;
-	}
-	
-	//En la terminal se chequea si los choferes y camiones estan autorizados
-	
+		
 }

@@ -34,73 +34,37 @@ public abstract class Orden {
 		this.cliente = cliente;
 		servicios = new ArrayList<Servicio>();
 	}
-	
-	public abstract void realizarOperacion();
-
-    public abstract boolean verificarCondiciones();
-	
+		
     public Container getContainer() {
 		return container;
-	}
-
-	public void setContainer(Container container) {
-		this.container = container;
 	}
 
 	public Viaje getViaje() {
 		return viaje;
 	}
 
-	public void setViaje(Viaje viaje) {
-		this.viaje = viaje;
-	}
-
 	public Camion getCamion() {
 		return camion;
-	}
-
-	public void setCamion(Camion camion) {
-		this.camion = camion;
 	}
 
 	public Chofer getChofer() {
 		return chofer;
 	}
 
-	public void setChofer(Chofer chofer) {
-		this.chofer = chofer;
-	}
-
 	public LocalDate getFechaSalida() {
 		return fechaSalida;
-	}
-
-	public void setFechaSalida(LocalDate fechaSalida) {
-		this.fechaSalida = fechaSalida;
 	}
 
 	public LocalDate getFechaLlegada() {
 		return fechaLlegada;
 	}
 
-	public void setFechaLlegada(LocalDate fechaLlegada) {
-		this.fechaLlegada = fechaLlegada;
-	}
-
 	public int getNroOrden() {
 		return nroOrden;
 	}
 
-	public void setNroOrden(int nroOrden) {
-		this.nroOrden = nroOrden;
-	}
-
 	public Cliente getCliente() {
 		return cliente;
-	}
-
-	public void setCliente(Cliente cliente) {
-		this.cliente = cliente;
 	}
 
 	public List<Servicio> getServicios() {

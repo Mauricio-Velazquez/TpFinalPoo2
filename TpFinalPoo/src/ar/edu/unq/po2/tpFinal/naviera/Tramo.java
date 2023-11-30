@@ -19,32 +19,16 @@ public class Tramo {
 		return terminalOrigen;
 	}
 
-	public void setTerminalOrigen(TerminalGestionada terminalOrigen) {
-		this.terminalOrigen = terminalOrigen;
-	}
-
 	public TerminalGestionada getTerminalDestino() {
 		return terminalDestino;
-	}
-
-	public void setTerminalDestino(TerminalGestionada terminalDestino) {
-		this.terminalDestino = terminalDestino;
 	}
 
 	public double getCosto() {
 		return costo;
 	}
 
-	public void setCosto(double costo) {
-		this.costo = costo;
-	}
-
 	public int getTiempoEstimadoEnHoras() {
 		return tiempoEstimadoEnHoras;
-	}
-
-	public void setTiempoEstimadoEnHoras(int tiempoEstimadoEnHoras) {
-		this.tiempoEstimadoEnHoras = tiempoEstimadoEnHoras;
 	}
 	
 	public boolean incluyeTerminal(TerminalGestionada terminal) {

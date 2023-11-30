@@ -9,8 +9,7 @@ public class ServicioLavado implements Servicio {
     private double montoInferior;
     private Container container;
 
-    public ServicioLavado(double costo,
-    	double montoSuperior, double montoInferior,Container container) {
+    public ServicioLavado(double costo, double montoSuperior, double montoInferior, Container container) {
         
         this.costo = costo;
         this.montoSuperior = montoSuperior;
@@ -36,15 +35,8 @@ public class ServicioLavado implements Servicio {
         return montoSuperior;
     }
 
-    public void setMontoSuperior(double montoSuperior) {
-        this.montoSuperior = montoSuperior;
-    }
-
     public double getMontoInferior() {
         return montoInferior;
     }
 
-    public void setMontoInferior(double montoInferior) {
-        this.montoInferior = montoInferior;
-    }
 }

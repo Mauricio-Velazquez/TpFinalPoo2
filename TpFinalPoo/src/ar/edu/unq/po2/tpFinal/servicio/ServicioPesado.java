@@ -4,31 +4,23 @@ public class ServicioPesado implements Servicio {
 	private double costo;
 	private double pesoRegistrado;
 	
-	public ServicioPesado(double costo) {
+	public ServicioPesado(double costo, double pesoRegistrado) {
 		this.costo = costo;
-	    this.pesoRegistrado = 0.0; // Inicialmente el peso registrado es 0
+	    this.pesoRegistrado = pesoRegistrado; 
 	}
 	
 	public double getPesoRegistrado() {
 		return pesoRegistrado;
 	}
-	
-	public void setPesoRegistrado(double pesoRegistrado) {
-        this.pesoRegistrado = pesoRegistrado;
-    }
+		
 	@Override
 	public double getCosto() {
 		return costo;
 	}
+	
 	@Override
 	public double calcularCosto() {
 		return costo; // El costo es fijo
 	}
-
-	    
-
-	    
-
-	   
 
 }

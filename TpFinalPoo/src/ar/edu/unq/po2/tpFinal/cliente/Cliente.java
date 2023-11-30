@@ -33,10 +33,6 @@ public abstract class Cliente {
 	public List<Orden> getOrdenes() {
 		return ordenes;
 	}
-
-	public void setMail(String mail) {
-		this.mail = mail;
-	}
 	
 	public void recibirFactura(String factura) {
 		System.out.println("Se recibio la factura" + factura);

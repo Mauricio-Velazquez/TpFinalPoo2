@@ -112,8 +112,6 @@ public class TerminalGestionada {
             Cliente clienteResponsablePago = orden.getCliente();
             clienteResponsablePago.recibirFactura(generarFacturaViajeYServicios(buque, clienteResponsablePago.getNombre()));
         });
-    	
-    	
     }
     
     public Posicion obtenerPosicionActual(){
@@ -137,15 +135,7 @@ public class TerminalGestionada {
     public void registrarEmpresaTransportista(EmpresaTransportista empresa) {
     	empresas.add(empresa);
     }
-    
-    public void agregarContainer(Container container) {
-    	containers.add(container);
-    }
-
-    public void retirarContainer(Container container) {
-    	containers.remove(container);
-    }
-    
+        
     public String getNombre() {
         return nombre;
     }
@@ -153,11 +143,7 @@ public class TerminalGestionada {
     public void posicionarTerminal(Posicion pos) {
     	gps.actualizarPosicion(pos);
     }
-    
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-    
+        
     // Devuelve una lista de viajes con el filtro dado.
     public List<Viaje> obtenerViajesPorFiltro(Filtro filtro){
 		List<Viaje> todosLosViajes = lineasNavieras.stream()
