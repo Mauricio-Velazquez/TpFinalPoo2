@@ -19,10 +19,10 @@ class ServicioLavadoTest {
 		mockContainer = Mockito.mock(ContainerReefer.class);
 		Mockito.when(mockContainer.getPesoTotal()).thenReturn(80.0);
 		
-		double montoSuperior = 20.0;
-		double montoInferior = 10.0;
+		double costoPorMontoSuperior = 20.0;
+		double costoPorMontoInferior = 10.0;
 		
-		servicioLavado = new ServicioLavado (250.0, montoSuperior, montoInferior, mockContainer );
+		servicioLavado = new ServicioLavado (costoPorMontoSuperior, costoPorMontoInferior, mockContainer );
 	}
 	
 	@Test

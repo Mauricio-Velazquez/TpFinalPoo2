@@ -32,14 +32,15 @@ public class ServicioElectricidad implements Servicio {
         if (inicioConexion != null && finConexion != null) {
             // Calcular la duración de la conexión en horas
             long duracionEnHoras = Duration.between(inicioConexion, finConexion).toHours();
+            //Se Verifica que no se pueda establecer una duracion en horas negativa ya que generaria un costo negativo
+            if(duracionEnHoras>0) {
             // Calcular el consumo total de kilowatts durante la conexión
             double consumoTotal = duracionEnHoras * (container.getConsumoDeEnergia());
             // Calcular el costo final multiplicando el consumo por el precio por kW
             return consumoTotal * costoPorKw;
-        } else {
-            // En caso de que no se haya establecido el inicio o fin de la conexión
-            return 0.0; // Otra opción podría ser lanzar una excepción indicando un error
+        	}
+        } 
+        // En caso de que no se haya establecido el inicio o fin de la conexión
+        return 0.0; // Otra opción podría ser lanzar una excepción indicando un error
         }
     }
-
-}
