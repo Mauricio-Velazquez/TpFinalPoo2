@@ -11,6 +11,7 @@ public class ServicioLavado implements Servicio {
 
     public ServicioLavado(double costo, double montoSuperior, double montoInferior, Container container) {
         
+    	//Para que se usa costo??????????????????????
         this.costo = costo;
         this.montoSuperior = montoSuperior;
         this.montoInferior = montoInferior;
