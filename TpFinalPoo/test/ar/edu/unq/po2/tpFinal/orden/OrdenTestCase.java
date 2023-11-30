@@ -51,7 +51,6 @@ public class OrdenTestCase {
 	private Tramo tramo4;
 	private Tramo tramo5;
 	private Reloj reloj;
-	private OrdenExportacion ordenExp;
 	
     @BeforeEach
     public void setUp() throws Exception{
@@ -104,9 +103,7 @@ public class OrdenTestCase {
                 
         terminal1.exportarA(terminal3, camion1, chofer1, container1, cliente1);
         
-        ordenExp = new OrdenExportacion(container1, viaje1, camion1, chofer1, viaje1.getFechaSalida(), viaje1.getFechaLlegada(), 1, cliente1);
-        
-        terminal3.importar(camion2, chofer2, container1, cliente2, ordenExp);
+        terminal1.importar(camion2, chofer2, container1, cliente2, viaje2);
         
     }
         

@@ -189,11 +189,10 @@ public class TerminalGestionada {
 		cliente.agregarOrden(orden);
 	}
 	
-	public void importar(Camion camion, Chofer chofer, Container container, ClienteConsignee cliente, OrdenExportacion ordenExp) {
+	public void importar(Camion camion, Chofer chofer, Container container, ClienteConsignee cliente, Viaje viaje) {
         clientes.add(cliente);
         camiones.add(camion);
         choferes.add(chofer);
-        Viaje viaje = ordenExp.getViaje();
 
         OrdenImportacion orden = new OrdenImportacion(container, viaje, camion, chofer, 
                                                                  viaje.getFechaSalida(), 
@@ -202,7 +201,7 @@ public class TerminalGestionada {
         orden.setServicios(container.getServiciosContratados());
         ordenes.add(orden);
         cliente.agregarOrden(orden);
-        this.enviarCorreoConFechaLlegadaConMargen(orden.getFechaLlegada(), cliente);
+        this.enviarCorreoConFechaLlegadaConMargen(viaje.getFechaLlegada(), cliente);
     }
 	
 	// Suponemos que todas las importanciones llegan a las 11:00 AM entonces el consignee tiene hasta las 11:00 AM del otro dia para buscar la carga.
