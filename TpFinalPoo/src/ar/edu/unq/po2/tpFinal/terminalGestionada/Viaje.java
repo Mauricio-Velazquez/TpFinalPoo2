@@ -11,11 +11,11 @@ public class Viaje {
     private Circuito circuito;
     private LocalDate fechaLlegada;
 
-    public Viaje(LocalDate fechaSalida, Buque buque, Circuito circuito, LocalDate fechaLlegada) {
+    public Viaje(LocalDate fechaSalida, Buque buque, Circuito circuito) {
         this.fechaSalida = fechaSalida;
         this.buque = buque;
         this.circuito = circuito;
-        this.fechaLlegada = fechaLlegada;
+        this.fechaLlegada = fechaSalida.plusDays(circuito.getTiempoTotal() / 24);
     }
 
     public LocalDate getFechaSalida() {

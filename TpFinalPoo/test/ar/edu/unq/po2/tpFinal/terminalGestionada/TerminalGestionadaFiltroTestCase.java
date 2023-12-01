@@ -46,17 +46,17 @@ class TerminalGestionadaFiltroTestCase {
 		 buque1 = mock(Buque.class);
 		 buque2 = mock(Buque.class);
 		 
-		 tramo1 = new Tramo(terminal1, terminal2, 500d, 70);
-		 tramo2 = new Tramo(terminal2, terminal3, 300d, 30);
-		 tramo3 = new Tramo(terminal3, terminal4, 400d, 40);
+		 tramo1 = new Tramo(terminal1, terminal2, 500d, 100);
+		 tramo2 = new Tramo(terminal2, terminal3, 300d, 200);
+		 tramo3 = new Tramo(terminal3, terminal4, 400d, 84);
 					
 		 circuito1 = new Circuito();
 		 circuito1.agregarTramo(tramo1);
 		 circuito1.agregarTramo(tramo2);
 		 circuito1.agregarTramo(tramo3);
 
-	     viaje1 = new Viaje(LocalDate.of(2023, 11, 15), buque1, circuito1, LocalDate.of(2023, 12, 1));
-	     viaje2 = new Viaje(LocalDate.of(2023, 11, 20), buque2, circuito1, LocalDate.of(2023, 12, 5));
+	     viaje1 = new Viaje(LocalDate.of(2023, 11, 15), buque1, circuito1);
+	     viaje2 = new Viaje(LocalDate.of(2023, 11, 20), buque2, circuito1);
 
 	     naviera.agregarBuque(buque1);
 	     naviera.agregarBuque(buque2);
