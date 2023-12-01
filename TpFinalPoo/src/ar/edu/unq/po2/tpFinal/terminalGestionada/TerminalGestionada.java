@@ -155,6 +155,13 @@ public class TerminalGestionada {
                  .collect(Collectors.toList());
     }
     
+    // Devuelve la proxima fecha de salida para la terminalDestino dada.
+    public LocalDate obtenerProximaFechaDeSalidaConTerminalDestino(TerminalGestionada terminalDestino){
+    	LocalDate fechaDeSalida = obtenerViajeConTerminalDestinoYFechaDeSalidaTemprana(terminalDestino).getFechaSalida();
+    	
+   	    return fechaDeSalida;
+   }
+    
     // Devuelve el viaje con la terminalDestino dada y fecha de salida mas temprana.
     public Viaje obtenerViajeConTerminalDestinoYFechaDeSalidaTemprana(TerminalGestionada terminalDestino){
     	List<Viaje> viajesConLaTerminalDestino = obtenerViajesPorFiltro(new FiltroPuertoDestino(terminalDestino));
