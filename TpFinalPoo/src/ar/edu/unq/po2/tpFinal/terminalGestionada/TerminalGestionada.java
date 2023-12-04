@@ -251,13 +251,18 @@ public class TerminalGestionada {
     }
     
     public boolean verificarSiLlegoEnHorarioElShipper(ClienteShipper cliente, int nroOrden, Reloj reloj) {
-    	Turno turno = cliente.getTurnos().stream()
-    									 .filter(t -> t.getNroOrden() == (nroOrden))
-    									 .findFirst()
-    									 .orElseThrow(() -> new RuntimeException("No se encontró un turno con el nroOrden dado."));
-
-    	int diferenciaEnHoras = reloj.getHora() - turno.getHora();
-    	return !(diferenciaEnHoras > 3) && verificarCliente(cliente);
+    	boolean existeNroOrden = ordenes.stream().anyMatch(orden -> orden.getNroOrden() == nroOrden);
+    	if(existeNroOrden && verificarCliente(cliente)) {
+    		Turno turno = cliente.getTurnos().stream()
+					                         .filter(t -> t.getNroOrden() == (nroOrden))
+					                         .findFirst()
+					                         .orElseThrow(() -> new RuntimeException("No se encontró un turno con el nroOrden dado."));
+			int diferenciaEnHoras = reloj.getHora() - turno.getHora();
+			return !(diferenciaEnHoras > 3);
+    	}
+    	else {
+        	return false;
+    	}
     }
         
     public boolean verificarCamion(Camion camion) {
