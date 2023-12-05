@@ -28,6 +28,17 @@ class CamionTestCase {
 	}
 	
 	@Test
+	void testChoferDeCamion() {
+		assertEquals(chofer1,camion1.getChofer());
+	}
+	
+	@Test
+	void testDniDeChoferDeCamion() {
+		assertEquals(34654745,camion1.getChofer().getDni());
+	}
+	
+	
+	@Test
 	void testIntentarCargarSegundoContainer() {
 		camion1.cargarContainer(container1);
 		camion1.cargarContainer(container2);

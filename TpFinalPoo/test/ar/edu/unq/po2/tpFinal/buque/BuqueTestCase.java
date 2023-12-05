@@ -6,10 +6,15 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
+import ar.edu.unq.po2.tpFinal.container.Container;
+import ar.edu.unq.po2.tpFinal.servicio.Servicio;
 import ar.edu.unq.po2.tpFinal.terminalGestionada.TerminalGestionada;
 
 
@@ -17,11 +22,56 @@ class BuqueTestCase {
 	private TerminalGestionada terminalMock;
     private Buque buque;
     private Buque buque1;
+    private List<Container> containers;
 
     @BeforeEach
     public void setUp() {
         terminalMock =  mock(TerminalGestionada.class);
         buque = new Buque(1, terminalMock);
+        containers = new ArrayList<>();
+    }
+    
+    @Test
+    void testGetIdentificador() {
+        int expectedId = 1;
+        int actualId = buque.getIdentificador();
+        assertEquals(expectedId, actualId);
+    }
+    
+    @Test
+    public void testCalcularMontoTotalServicios() {
+    	Container containerMock1 = mock(Container.class);
+        Container containerMock2 = mock(Container.class);
+
+        Servicio servicioMock1 = mock(Servicio.class);
+        Servicio servicioMock2 = mock(Servicio.class);
+
+        when(containerMock1.getServiciosContratados()).thenReturn(List.of(servicioMock1));
+        when(containerMock2.getServiciosContratados()).thenReturn(List.of(servicioMock2));
+
+        containers.add(containerMock1);
+        containers.add(containerMock2);
+
+        buque.agregarContainer(containerMock1);
+        buque.agregarContainer(containerMock2);
+
+        double costoTotalEsperado = servicioMock1.getCosto() + servicioMock2.getCosto();
+        double delta = 0.0001; // la cantidad permitida de diferencia entre dos valores decimales para considerarlos iguales en una comparación
+        assertEquals(costoTotalEsperado, buque.calcularMontoTotalServicios(), delta);
+    }
+
+    @Test
+    public void testGetContainersAsociados() {
+        Container containerMock1 = mock(Container.class);
+        Container containerMock2 = mock(Container.class);
+
+        containers.add(containerMock1);
+        containers.add(containerMock2);
+
+        buque.agregarContainer(containerMock1);
+        buque.agregarContainer(containerMock2);
+
+        assertEquals(containers, buque.getContainersAsociados());
     }
 
     @Test

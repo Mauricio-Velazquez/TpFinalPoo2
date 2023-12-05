@@ -5,8 +5,6 @@ import ar.edu.unq.po2.tpFinal.terminalGestionada.TerminalGestionada;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class Buque {
 	private int identificador;
@@ -68,7 +66,8 @@ public class Buque {
 		    }
 	 }
 	 
-	 public void simularActualizacionPeriodica() {
+	 /*
+	  * public void simularActualizacionPeriodica() {
 		    Timer timer = new Timer();
 		    timer.schedule(new TimerTask() {
 		        @Override
@@ -89,6 +88,7 @@ public class Buque {
 		        }
 		    }, 0, 60000);  // Actualizar cada minuto (60000 milisegundos)
 		}
+	  * */
 
 	 
 	 public double calcularDistanciaATerminal() {
