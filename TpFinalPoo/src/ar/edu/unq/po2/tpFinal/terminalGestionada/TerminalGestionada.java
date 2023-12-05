@@ -59,7 +59,6 @@ public class TerminalGestionada {
     }
     
     public boolean habilitarPartida(Buque buque) {
-    	buque.getEstadoActual().siguienteFase(buque);
     	return true;// Cambio de fase
     }
     
@@ -72,7 +71,7 @@ public class TerminalGestionada {
         .forEach(cliente -> enviarCorreoConsignee(cliente, "El buque " + buque.getIdentificador() + "se encuentra en estado"+ buque.getEstadoActual()));
     }
 
-    private List<Orden> obtenerOrdenesEsperandoBuque(Buque buque) {
+    public List<Orden> obtenerOrdenesEsperandoBuque(Buque buque) {
         return ordenes.stream()
                 .filter(orden -> orden.getViaje().getBuque().equals(buque))
                 .collect(Collectors.toList());
