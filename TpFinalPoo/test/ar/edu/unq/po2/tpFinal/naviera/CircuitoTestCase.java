@@ -69,6 +69,15 @@ public class CircuitoTestCase {
 	}
 	
 	@Test
+	public void testCircuitoIncluyeTerminalDestino() throws Exception {
+		circuito1.agregarTramo(tramo1);
+		circuito1.agregarTramo(tramo2);
+		circuito1.agregarTramo(tramo3);
+		assertTrue(circuito1.incluyeTerminalDestino(terminal4));
+		assertEquals(circuito1.getTramos().size(), 3);
+	}
+	
+	@Test
 	public void testCircuitoIncluyeTerminal() throws Exception {
 		circuito1.agregarTramo(tramo1);
 		circuito1.agregarTramo(tramo2);

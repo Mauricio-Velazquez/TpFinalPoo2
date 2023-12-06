@@ -55,5 +55,10 @@ public class Naviera {
 	public boolean incluyeTerminalDestinoEnLosViajes(TerminalGestionada terminal) {
 		return viajes.stream().anyMatch(v -> v.getCircuito().incluyeTerminalDestino(terminal));
 	}
+	
+	// Devuelve una lista con los circuitos que posean a la terminal dada.	
+	public List<Circuito> circuitosConLaTerminal(TerminalGestionada terminal) {
+		return circuitos.stream().filter(c -> c.incluyeTerminal(terminal)).toList();
+	}
 	    
 }

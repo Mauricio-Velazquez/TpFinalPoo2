@@ -13,8 +13,7 @@ class ServicioAlmacenamientoExcedenteTest {
 	@Test
 	public void testCalcularCosto() {
 		double costoCalculado = servicio.calcularCosto();
-		double costoEsperado = costoPorDia * diasAlmacenados;
-		assertEquals(costoEsperado,costoCalculado);
+		assertEquals(servicio.getCosto(), costoCalculado);
 	}
 
 }

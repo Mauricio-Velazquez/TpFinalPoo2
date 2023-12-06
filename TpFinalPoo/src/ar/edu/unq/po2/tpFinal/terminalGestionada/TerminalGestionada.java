@@ -293,7 +293,7 @@ public class TerminalGestionada {
     }
     
     // Si el Consignee se demora mas de 24 hs en buscar su carga se le cobra un monto fijo adicional por dia.
-    public void verificarCondicionesDeIngresoDelConsignee(ClienteConsignee cliente, Camion camion, Chofer chofer, Reloj reloj, int nroOrden) {
+    public boolean verificarCondicionesDeIngresoDelConsignee(ClienteConsignee cliente, Camion camion, Chofer chofer, Reloj reloj, int nroOrden) {
     	Orden orden = ordenes.stream()
     						 .filter(o -> o.getNroOrden() == (nroOrden))
     						 .findFirst()
@@ -303,6 +303,7 @@ public class TerminalGestionada {
     	if(this.verificarSiLlegoEnHorarioElConsignee(cliente, orden, reloj) && this.verificarCamion(camion) && this.verificarChofer(chofer)) {
     		camion.cargarContainer(container);
     		containers.remove(container);
+    		return true;
     	}
 		else if(verificarCliente(cliente) && this.verificarCamion(camion) && this.verificarChofer(chofer)) {
 			LocalDate fechaInicial = orden.getFechaLlegada();
@@ -311,7 +312,9 @@ public class TerminalGestionada {
 			orden.agregarServicio(servicio);
     		camion.cargarContainer(container);
     		containers.remove(container);
+    		return true;
 		}
+    	return false;
     }
     
     // Verifica si el Consignee llego dentro de las 24 hs.

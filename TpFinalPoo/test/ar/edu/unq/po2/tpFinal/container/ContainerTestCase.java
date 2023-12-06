@@ -25,6 +25,15 @@ class ContainerTestCase {
 	    }
 
 	    @Test
+	    public void testVerificarDatosDeContainer() {
+	        assertEquals(container.getId(), 1);
+	        assertEquals(container.getAncho(), 10);
+	        assertEquals(container.getLargo(), 12);
+	        assertEquals(container.getAltura(), 8);
+	        assertEquals(container.getPesoTotal(), 500);
+	    }
+	    
+	    @Test
 	    public void testContratarServicio() {
 	        Servicio servicioMock = mock(Servicio.class);
 	        container.contratarServicio(servicioMock);

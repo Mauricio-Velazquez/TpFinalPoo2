@@ -32,7 +32,7 @@ class BuqueTestCase {
     }
     
     @Test
-    void testGetIdentificador() {
+    public void testGetIdentificador() {
         int expectedId = 1;
         int actualId = buque.getIdentificador();
         assertEquals(expectedId, actualId);

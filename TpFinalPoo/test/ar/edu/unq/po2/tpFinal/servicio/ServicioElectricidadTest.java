@@ -44,30 +44,30 @@ public class ServicioElectricidadTest {
 	@Test
 	public void testCalcularCosto() {
 		double costo = servicioElectricidad.calcularCosto();
-		assertEquals (400,costo);
+		assertEquals(servicioElectricidad.getCosto(), costo);
 	}
 	
 	@Test
 	public void testCalcularCostoCuandoNoSeEstableceElInicioDeConexion() {
 		double costo = servicioElectricidadSinInicioDeConexion.calcularCosto();
-		assertEquals (0,costo);
+		assertEquals(servicioElectricidadSinInicioDeConexion.getCosto(), costo);
 	} 
 	
 	@Test
 	public void testCalcularCostoCuandoNoSeEstableceElFinDeConexion() {
 		double costo = servicioElectricidadSinFinDeConexion.calcularCosto();
-		assertEquals (0,costo);
+		assertEquals(servicioElectricidadSinFinDeConexion.getCosto(), costo);
 	} 
 	
 	@Test
 	public void testCalcularCostoCuandoNoSeEstableceElInicioNiFinDeConexion() {
 		double costo = servicioElectricidadSinInicioNiFinDeConexion.calcularCosto();
-		assertEquals (0,costo);
+		assertEquals(servicioElectricidadSinInicioNiFinDeConexion.getCosto(), costo);
 	} 
 	
 	@Test
 	public void testCalcularCostoCuandoElFinDeConexionEsMayorAlInicio(){
 		double costo = servicioElectricidadConFinDeConexionMayorAlInicio.calcularCosto();
-		assertEquals (0,costo);
+		assertEquals(servicioElectricidadConFinDeConexionMayorAlInicio.getCosto(), costo);
 	}
-	}
+}

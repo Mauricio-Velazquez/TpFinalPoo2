@@ -14,7 +14,7 @@ class CamionTestCase {
 	private ContainerDry container2;
 	
 	@BeforeEach
-	void setUp(){
+	public void setUp(){
 		chofer1 = new Chofer(34654745);
 		camion1 = new Camion("AAA111", chofer1);
 		container1 = new ContainerDry (9233, 4, 10, 3, 2000);
@@ -22,38 +22,45 @@ class CamionTestCase {
 	}
 			
 	@Test
-	void testCargarContainerExitoso() {
+	public void testCargarContainerExitoso() {
 		camion1.cargarContainer(container1);
 		assertEquals(container1, camion1.getContainerCargado());
 	}
 	
 	@Test
-	void testChoferDeCamion() {
-		assertEquals(chofer1,camion1.getChofer());
+	public void testChoferDeCamion() {
+		assertEquals(chofer1, camion1.getChofer());
 	}
 	
 	@Test
-	void testDniDeChoferDeCamion() {
-		assertEquals(34654745,camion1.getChofer().getDni());
+	public void testDniDeChoferDeCamionYPatente() {
+		assertEquals("AAA111", camion1.getPatente());
+		assertEquals(34654745, camion1.getChofer().getDni());
 	}
 	
 	
 	@Test
-	void testIntentarCargarSegundoContainer() {
+	public void testIntentarCargarSegundoContainer() {
 		camion1.cargarContainer(container1);
 		camion1.cargarContainer(container2);
 		assertEquals(container1, camion1.getContainerCargado());
 	}
 	
 	@Test
-	void testDescargarContainer() {
+	public void testDescargarContainer() {
 		camion1.cargarContainer(container1);
 		camion1.descargarContainer();
 		assertEquals(camion1.getContainerCargado(), null);
 	}
 	
 	@Test
-	void testIntentarCargarContenedorNulo() {
+	public void testIntentarDescargarContainerNulo() {
+		camion1.descargarContainer();
+		assertEquals(camion1.getContainerCargado(), null);
+	}
+	
+	@Test
+	public void testIntentarCargarContenedorNulo() {
 		camion1.cargarContainer(null);
 		assertNull(camion1.getContainerCargado());
 	}

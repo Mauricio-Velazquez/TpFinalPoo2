@@ -18,14 +18,14 @@ class ClienteTestCase {
 	 private ClienteShipper shipper;;
 
 	    @BeforeEach
-	    void setUp() {
+	    public void setUp() {
 	        consignee = new ClienteConsignee("Mauri", 123456789, "Mauri@example.com");
 	        shipper = new ClienteShipper("Ivan", 987654321, "Ivan@example.com");
 	        
 	    }
 	    
 	    @Test
-	    void testRecibirFactura() {
+	    public void testRecibirFactura() {
 	        assertEquals(0, consignee.getOrdenes().size());
 	        
 	        consignee.recibirFactura("Factura de ejemplo");
@@ -35,7 +35,7 @@ class ClienteTestCase {
 	    }
 	    
 	    @Test
-	    void testGetOrdenes() {
+	    public void testGetOrdenes() {
 	        assertEquals(0, shipper.getOrdenes().size());
 	        
 	        // Crear una lista simulada de órdenes
@@ -57,7 +57,7 @@ class ClienteTestCase {
 	    }
 	 
 	    @Test 
-	    void testGetMailYGetDni(){
+	    public void testGetMailYGetDni(){
 	    	assertEquals("Mauri@example.com",consignee.getMail());
 	    	assertEquals("Ivan@example.com",shipper.getMail());
 	    	assertEquals(123456789,consignee.getDni());
@@ -65,7 +65,7 @@ class ClienteTestCase {
 	    }
 
 	    @Test
-	    void testGetNombre() {
+	    public void testGetNombre() {
 	        String expectedNombre1 = "Mauri";
 	        String actualNombre1 = consignee.getNombre();
 	        assertEquals(expectedNombre1, actualNombre1);
@@ -76,7 +76,7 @@ class ClienteTestCase {
 	    }
 	    
 	    @Test
-	    void testAgregarTurno() {
+	    public void testAgregarTurno() {
 	        Turno turnoMock = mock(Turno.class);
 	        shipper.agregarTurno(turnoMock);
 	        assertEquals(1, shipper.getTurnos().size());

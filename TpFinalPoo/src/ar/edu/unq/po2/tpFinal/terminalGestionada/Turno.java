@@ -10,11 +10,11 @@ public class Turno {
 		this.fechaYHora = fechaYHora;
 		this.nroOrden = nroOrden;
 	}
-
+	
 	public LocalDateTime getFechaYHora() {
 		return fechaYHora;
 	}
-	
+
 	public int getHora() {
 		return fechaYHora.getHour();
 	}

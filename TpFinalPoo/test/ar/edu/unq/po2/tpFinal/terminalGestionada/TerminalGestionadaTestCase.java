@@ -9,6 +9,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,6 +21,7 @@ import ar.edu.unq.po2.tpFinal.cliente.Cliente;
 import ar.edu.unq.po2.tpFinal.cliente.ClienteConsignee;
 import ar.edu.unq.po2.tpFinal.cliente.ClienteShipper;
 import ar.edu.unq.po2.tpFinal.container.ContainerDry;
+import ar.edu.unq.po2.tpFinal.container.ContainerTanque;
 import ar.edu.unq.po2.tpFinal.empresaTransportista.Camion;
 import ar.edu.unq.po2.tpFinal.empresaTransportista.Chofer;
 import ar.edu.unq.po2.tpFinal.empresaTransportista.EmpresaTransportista;
@@ -39,22 +41,27 @@ public class TerminalGestionadaTestCase {
 	private ClienteShipper cliente1;
 	private ClienteConsignee cliente2;
 	private ContainerDry container1;
+	private ContainerTanque container2;
 	private Viaje viaje1;
 	private Viaje viaje2;
+	private Viaje viaje3;
 	private Camion camion1;
 	private Chofer chofer1;
 	private Camion camion2;
 	private Chofer chofer2;
 	private Buque buque1;
 	private Buque buque2;
+	private Buque buque3;
 	private Circuito circuito1;
 	private Circuito circuito2;
+	private Circuito circuito3;
 	private Tramo tramo1;
 	private Tramo tramo2;
 	private Tramo tramo3;
 	private Tramo tramo4;
 	private Tramo tramo5;
 	private Reloj reloj;
+	
 	// Crear el mock de EstrategiaMenorCantidadDeTramos
     EstrategiaMenorCantidadDeTramos estrategiaMock = mock(EstrategiaMenorCantidadDeTramos.class);
 	
@@ -74,15 +81,19 @@ public class TerminalGestionadaTestCase {
 		chofer1 = mock(Chofer.class);
 		camion1 = new Camion("AAA111", chofer1);
 		camion1.cargarContainer(container1);
-		buque1 = mock(Buque.class);
-		buque2 = mock(Buque.class);
 		
+		container2 = mock(ContainerTanque.class);
 		chofer2 = mock(Chofer.class);
 		camion2 = new Camion("BBB333", chofer2);
 		
+		buque1 = mock(Buque.class);
+		buque2 = mock(Buque.class);
+		buque3 = mock(Buque.class);
+				
 		tramo1 = new Tramo(terminal1, terminal2, 500d, 70);
 		tramo2 = new Tramo(terminal2, terminal3, 300d, 30);
 		tramo3 = new Tramo(terminal3, terminal4, 400d, 40);
+		
 		tramo4 = new Tramo(terminal1, terminal2, 900d, 10);
 		tramo5 = new Tramo(terminal2, terminal4, 600d, 40);
 		
@@ -95,8 +106,11 @@ public class TerminalGestionadaTestCase {
 		circuito2.agregarTramo(tramo4);
 		circuito2.agregarTramo(tramo5);
 		
-        viaje1 = new Viaje(LocalDate.of(2023, 11, 15), buque1, circuito1);
+		circuito3 = mock(Circuito.class);
+		
+        viaje1 = new Viaje(LocalDate.of(2023, 11, 13), buque1, circuito1);
         viaje2 = new Viaje(LocalDate.of(2023, 11, 15), buque2, circuito2);
+        viaje3 = new Viaje(LocalDate.of(2023, 12, 24), buque3, circuito3);
         
         naviera.agregarBuque(buque1);
         naviera.agregarBuque(buque2);
@@ -106,21 +120,59 @@ public class TerminalGestionadaTestCase {
         naviera.agregarViaje(viaje2);
         
         terminal1.registrarLineaNaviera(naviera);
-                
-        terminal1.exportarA(terminal3, camion1, chofer1, container1, cliente1);
-        
-        terminal1.importar(camion2, chofer2, container1, cliente2, viaje2);
-        
+                        
     }
         
-    /*
-     * @Test 
-    public void testVerificarOrdenCargadaCorrectamente(){
+    @Test 
+    public void testVerificarOrdenDeExportacionCargadaCorrectamente(){
+        terminal1.exportarA(terminal3, camion1, chofer1, container1, cliente1);
 		assertEquals(terminal1.cantidadDeOrdenes(), 1);
+		assertEquals(cliente1.getOrdenes().size(), 1);
 		assertEquals(terminal1.obtenerViajeConTerminalDestinoYFechaDeSalidaTemprana(terminal3), viaje1);
-		assertTrue(cliente1.getTurnos().stream().anyMatch(turno -> turno.getFechaYHora().equals(LocalDateTime.of(2023, 11, 15, 9, 0))));
+		assertTrue(cliente1.getTurnos().stream().anyMatch(turno -> turno.getFechaYHora().equals(LocalDateTime.of(2023, 11, 13, 9, 0))));
 	}
-     */
+    
+    @Test
+    public void testVerificarCondicionesDeIngresoDeUnShipper() {
+        terminal1.exportarA(terminal3, camion1, chofer1, container1, cliente1);
+		reloj = mock(Reloj.class);
+		when(reloj.getHora()).thenReturn(11);
+		
+    	assertTrue(terminal1.verificarCondicionesDeIngresoDelShipper(cliente1, camion1, chofer1, reloj, 1));
+    }
+    
+    @Test 
+    public void testVerificarSiElShipperLlegoEnLaHoraAsignada(){
+        terminal1.exportarA(terminal3, camion1, chofer1, container1, cliente1);
+		reloj = mock(Reloj.class);
+		when(reloj.getHora()).thenReturn(11);
+		
+    	assertTrue(terminal1.verificarSiLlegoEnHorarioElShipper(cliente1, 1, reloj));
+	}
+    
+    @Test 
+    public void testElShipperNoLlegoEnLaHoraAsignada(){
+        terminal1.exportarA(terminal3, camion1, chofer1, container1, cliente1);
+		reloj = mock(Reloj.class);
+		when(reloj.getHora()).thenReturn(14);
+		
+    	assertFalse(terminal1.verificarSiLlegoEnHorarioElShipper(cliente1, 1, reloj));
+	}
+    
+    @Test 
+    public void testVerificarOrdenDeImportacionCargadaCorrectamente(){
+        terminal1.importar(camion2, chofer2, container2, cliente2, viaje3);
+		assertEquals(terminal1.cantidadDeOrdenes(), 1);
+	}
+    
+    @Test
+    public void testVerificarCondicionesDeIngresoDeUnConsignee() {
+    	terminal1.importar(camion2, chofer2, container1, cliente2, viaje3);
+		reloj = mock(Reloj.class);
+		when(reloj.getFechaYHora()).thenReturn(LocalDateTime.of(2023, 12, 24, 16, 00));
+		
+		assertTrue(terminal1.verificarCondicionesDeIngresoDelConsignee(cliente2, camion2, chofer2, reloj, 1));
+    }
     
     @Test
     public void testRegistroMetodos() {
@@ -179,29 +231,5 @@ public class TerminalGestionadaTestCase {
         assertEquals(1, terminal.getCamiones().size());
         assertEquals(camionMock, terminal.getCamiones().get(0));
     }
-    
-    @Test
-    public void testVerificarCondicionesDeIngresoDeUnShipper() {
-		reloj = mock(Reloj.class);
-		when(reloj.getHora()).thenReturn(11);
-		
-    	assertTrue(terminal1.verificarCondicionesDeIngresoDelShipper(cliente1, camion1, chofer1, reloj, 1));
-    }
-    
-    @Test 
-    public void testVerificarSiElShipperLlegoEnLaHoraAsignada(){
-		reloj = mock(Reloj.class);
-		when(reloj.getHora()).thenReturn(11);
-		
-    	assertTrue(terminal1.verificarSiLlegoEnHorarioElShipper(cliente1, 1, reloj));
-	}
-    
-    @Test 
-    public void testElShipperNoLlegoEnLaHoraAsignada(){
-		reloj = mock(Reloj.class);
-		when(reloj.getHora()).thenReturn(14);
-		
-    	assertFalse(terminal1.verificarSiLlegoEnHorarioElShipper(cliente1, 1, reloj));
-	}
-    
+        
 }
