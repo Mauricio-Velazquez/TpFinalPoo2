@@ -95,7 +95,7 @@ public class TerminalGestionada {
         // Devolver la factura para posibles usos adicionales
         return facturaServicios;
     }
-
+    
     private String generarFactura(String responsablePago, double montoTotalServicios
     		, List<Servicio> servicios) {
     	return "Factura generada para " + responsablePago + ". Total a pagar por servicios: $" + montoTotalServicios+" deglose de servicios "+servicios;
@@ -123,6 +123,18 @@ public class TerminalGestionada {
     	lineasNavieras.add(lineaNaviera);
     }
     
+    public void setGPS(GPS gps) {
+    	this.gps =gps;
+    }
+    
+    public void registrarCamion(Camion camion) {
+        camiones.add(camion);
+    }
+    
+    public void registrarChofer(Chofer chofer) {
+        choferes.add(chofer);
+    }
+
     public void registrarOrden(Orden orden) {
     	ordenes.add(orden);
     }
@@ -137,6 +149,10 @@ public class TerminalGestionada {
         
     public String getNombre() {
         return nombre;
+    }
+    
+    public List<Camion> getCamiones(){
+    	return this.camiones;
     }
     
     public void posicionarTerminal(Posicion pos) {

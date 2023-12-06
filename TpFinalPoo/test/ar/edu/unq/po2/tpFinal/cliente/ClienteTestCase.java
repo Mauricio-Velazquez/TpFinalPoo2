@@ -9,12 +9,8 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import ar.edu.unq.po2.tpFinal.container.Container;
-import ar.edu.unq.po2.tpFinal.empresaTransportista.Camion;
-import ar.edu.unq.po2.tpFinal.empresaTransportista.Chofer;
 import ar.edu.unq.po2.tpFinal.orden.Orden;
 import ar.edu.unq.po2.tpFinal.terminalGestionada.Turno;
-import ar.edu.unq.po2.tpFinal.terminalGestionada.Viaje;
 
 class ClienteTestCase {
 

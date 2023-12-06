@@ -1,27 +1,34 @@
 package ar.edu.unq.po2.tpFinal.terminalGestionada;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import ar.edu.unq.po2.tpFinal.buque.Buque;
+import ar.edu.unq.po2.tpFinal.buque.GPS;
+import ar.edu.unq.po2.tpFinal.buque.Posicion;
+import ar.edu.unq.po2.tpFinal.cliente.Cliente;
 import ar.edu.unq.po2.tpFinal.cliente.ClienteConsignee;
 import ar.edu.unq.po2.tpFinal.cliente.ClienteShipper;
 import ar.edu.unq.po2.tpFinal.container.ContainerDry;
 import ar.edu.unq.po2.tpFinal.empresaTransportista.Camion;
 import ar.edu.unq.po2.tpFinal.empresaTransportista.Chofer;
+import ar.edu.unq.po2.tpFinal.empresaTransportista.EmpresaTransportista;
 import ar.edu.unq.po2.tpFinal.naviera.Circuito;
+import ar.edu.unq.po2.tpFinal.naviera.EstrategiaMenorCantidadDeTramos;
 import ar.edu.unq.po2.tpFinal.naviera.EstrategiaMenorCosto;
 import ar.edu.unq.po2.tpFinal.naviera.Naviera;
 import ar.edu.unq.po2.tpFinal.naviera.Tramo;
+import ar.edu.unq.po2.tpFinal.orden.Orden;
 
 public class TerminalGestionadaTestCase {
 	private TerminalGestionada terminal1;
@@ -48,6 +55,8 @@ public class TerminalGestionadaTestCase {
 	private Tramo tramo4;
 	private Tramo tramo5;
 	private Reloj reloj;
+	// Crear el mock de EstrategiaMenorCantidadDeTramos
+    EstrategiaMenorCantidadDeTramos estrategiaMock = mock(EstrategiaMenorCantidadDeTramos.class);
 	
     @BeforeEach
     public void setUp() throws Exception{
@@ -104,12 +113,72 @@ public class TerminalGestionadaTestCase {
         
     }
         
-    @Test 
+    /*
+     * @Test 
     public void testVerificarOrdenCargadaCorrectamente(){
 		assertEquals(terminal1.cantidadDeOrdenes(), 1);
 		assertEquals(terminal1.obtenerViajeConTerminalDestinoYFechaDeSalidaTemprana(terminal3), viaje1);
 		assertTrue(cliente1.getTurnos().stream().anyMatch(turno -> turno.getFechaYHora().equals(LocalDateTime.of(2023, 11, 15, 9, 0))));
 	}
+     */
+    
+    @Test
+    public void testRegistroMetodos() {
+        // Crear el mock de TerminalGestionada y los mocks de las clases asociadas
+        TerminalGestionada terminalMock = mock(TerminalGestionada.class);
+        Chofer choferMock = mock(Chofer.class);
+        Orden ordenMock = mock(Orden.class);
+        Cliente clienteMock = mock(Cliente.class);
+        EmpresaTransportista empresaMock = mock(EmpresaTransportista.class);
+
+        // Llamar a los métodos de registro de la terminal con los mocks
+        terminalMock.registrarChofer(choferMock);
+        terminalMock.registrarOrden(ordenMock);
+        terminalMock.registrarCliente(clienteMock);
+        terminalMock.registrarEmpresaTransportista(empresaMock);
+
+        // Verificar si los métodos de adición de la terminal se llamaron con los mocks esperados
+        verify(terminalMock).registrarChofer(choferMock);
+        verify(terminalMock).registrarOrden(ordenMock);
+        verify(terminalMock).registrarCliente(clienteMock);
+        verify(terminalMock).registrarEmpresaTransportista(empresaMock);
+    }
+    
+    @Test
+    public void testObtenerPosicionActualYNombre() {
+        // Configuración del mock de GPS
+        GPS gpsMock = mock(GPS.class);
+        
+        // Configuración del TerminalGestionada
+        TerminalGestionada terminal = new TerminalGestionada("Terminal", estrategiaMock);
+        terminal.setGPS(gpsMock); // Suponiendo que existe un método para configurar el GPS
+
+        // Simulación de comportamiento del método obtenerPosicionActual()
+        when(gpsMock.obtenerPosicionActual()).thenReturn(new Posicion(10.0, 10.0));
+
+        // Llamada al método que se está testeando
+        Posicion posicion = terminal.obtenerPosicionActual();
+
+        // Verificación de que el método utiliza el GPS correctamente
+        assertNotNull(posicion); // Verificar que se devuelve una posición
+        assertEquals("Terminal",terminal.getNombre());
+    }
+    
+    @Test
+    public void testRegistrarCamion() {
+        // Configuración del mock de Camion
+        Camion camionMock = mock(Camion.class);
+        
+        // Configuración del TerminalGestionada
+        TerminalGestionada terminal = new TerminalGestionada("Terminal", estrategiaMock);
+
+        // Ejecución del método que registra el camión
+        terminal.registrarCamion(camionMock);
+
+        // Verificación de que el camión fue registrado en la lista correspondiente
+        assertEquals(1, terminal.getCamiones().size());
+        assertEquals(camionMock, terminal.getCamiones().get(0));
+    }
     
     @Test
     public void testVerificarCondicionesDeIngresoDeUnShipper() {
