@@ -101,7 +101,7 @@ public class TerminalGestionada {
     	return "Factura generada para " + responsablePago + ". Total a pagar por servicios: $" + montoTotalServicios+" deglose de servicios "+servicios;
     }
 
-    public void enviarFacturaPorEmail(Buque buque,TerminalGestionada terminal) {
+    public void enviarFacturaPorEmail(Buque buque, TerminalGestionada terminal) {
     
     	List<Orden> ordenesBuscadas = ordenes.stream()
                 .filter(orden -> orden.getViaje().getBuque().equals(buque)).toList();
@@ -133,10 +133,6 @@ public class TerminalGestionada {
     
     public List<Orden> getOrdenes(){
     	return this.ordenes;
-    }
-    
-    public void setOrdenes(List<Orden> ordenes) {
-    	this.ordenes = ordenes;
     }
     
     public List<Cliente> getClientes(){

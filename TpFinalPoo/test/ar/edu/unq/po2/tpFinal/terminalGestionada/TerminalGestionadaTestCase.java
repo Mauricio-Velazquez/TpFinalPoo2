@@ -3,6 +3,7 @@ package ar.edu.unq.po2.tpFinal.terminalGestionada;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.anyString;
 import static org.mockito.Mockito.mock;
@@ -32,6 +33,7 @@ import ar.edu.unq.po2.tpFinal.empresaTransportista.EmpresaTransportista;
 import ar.edu.unq.po2.tpFinal.naviera.Circuito;
 import ar.edu.unq.po2.tpFinal.naviera.EstrategiaMenorCantidadDeTramos;
 import ar.edu.unq.po2.tpFinal.naviera.EstrategiaMenorCosto;
+import ar.edu.unq.po2.tpFinal.naviera.EstrategiaMenorTiempo;
 import ar.edu.unq.po2.tpFinal.naviera.Naviera;
 import ar.edu.unq.po2.tpFinal.naviera.Tramo;
 import ar.edu.unq.po2.tpFinal.orden.Orden;
@@ -115,14 +117,12 @@ public class TerminalGestionadaTestCase {
 		
         viaje1 = new Viaje(LocalDate.of(2023, 11, 13), buque1, circuito1);
         viaje2 = new Viaje(LocalDate.of(2023, 11, 15), buque2, circuito2);
-        //viaje3 = new Viaje(LocalDate.of(2023, 12, 24), buque3, circuito3);
         
         viaje3 = mock(Viaje.class);
         when(viaje3.getBuque()).thenReturn(buque3);
         when(viaje3.getCircuito()).thenReturn(circuito3);
         when(viaje3.getFechaSalida()).thenReturn(LocalDate.of(2023, 12, 24));
         when(viaje3.getFechaLlegada()).thenReturn(LocalDate.of(2023, 12, 28));
-        
         
         naviera.agregarBuque(buque1);
         naviera.agregarBuque(buque2);
@@ -161,8 +161,6 @@ public class TerminalGestionadaTestCase {
         verify(clienteMock, times(1)).recibirEmail(anyString()); // Ajustar el número según la cantidad esperada
     }
     
-    
-    
     @Test
     public void testGenerarFacturaViajeYServicios() {
         // Crear mocks de las dependencias necesarias
@@ -194,12 +192,6 @@ public class TerminalGestionadaTestCase {
         verify(containerMock1, times(1)).getServiciosContratados();
         verify(containerMock2, times(1)).getServiciosContratados();
     }
-    
-   
-
-
-
-
     
     @Test
     public void testConsultarInicioDeTrabajo() {
@@ -275,8 +267,9 @@ public class TerminalGestionadaTestCase {
     public void testVerificarCondicionesDeIngresoDeUnConsignee() {
     	terminal1.importar(camion2, chofer2, container2, cliente2, viaje3);
 		reloj = mock(Reloj.class);
-		when(reloj.getFechaYHora()).thenReturn(LocalDateTime.of(2023, 12, 24, 16, 00));
+		when(reloj.getFechaYHora()).thenReturn(LocalDateTime.of(2023, 12, 28, 16, 00));
 		
+		assertEquals(reloj.getFechaYHora(), LocalDateTime.of(2023, 12, 28, 16, 00));
 		assertTrue(terminal1.verificarCondicionesDeIngresoDelConsignee(cliente2, camion2, chofer2, reloj, 1));
 		assertEquals(terminal1.getContainers().size(), 0);
 		assertEquals(camion2.getContainerCargado(), container2);
@@ -299,6 +292,24 @@ public class TerminalGestionadaTestCase {
 									 .getFirst();
 		assertEquals(servicio.getCosto(), 600, 0.000);
     }
+    
+    @Test 
+    public void testElChoferDelConsigneeNoCoincideConElRegistrado(){
+    	terminal1.importar(camion2, chofer2, container2, cliente2, viaje3);
+		reloj = mock(Reloj.class);
+		when(reloj.getFechaYHora()).thenReturn(LocalDateTime.of(2023, 12, 28, 16, 00));
+		
+    	assertFalse(terminal1.verificarCondicionesDeIngresoDelConsignee(cliente2, camion2, chofer1, reloj, 1));	
+	}
+    
+    @Test 
+    public void testElCamionDelConsigneeNoCoincideConElRegistrado(){
+    	terminal1.importar(camion2, chofer2, container2, cliente2, viaje3);
+		reloj = mock(Reloj.class);
+		when(reloj.getFechaYHora()).thenReturn(LocalDateTime.of(2023, 12, 28, 16, 00));
+		
+    	assertFalse(terminal1.verificarCondicionesDeIngresoDelConsignee(cliente2, camion1, chofer2, reloj, 1));	
+	}
     
     @Test
     public void testRegistroMetodos() {
@@ -348,7 +359,6 @@ public class TerminalGestionadaTestCase {
         assertEquals("Terminal", terminal.getNombre());
     }
 
-    
     @Test
     public void testRegistrarCamion() {
         // Configuración del mock de Camion
@@ -365,4 +375,53 @@ public class TerminalGestionadaTestCase {
         assertEquals(camionMock, terminal.getCamiones().get(0));
     }
         
+    @Test
+    public void testCuantoTardaEnLlegarElViajeDeLaNaviera() {
+    	assertEquals(terminal1.cuantoTardaEnLlegar(naviera, terminal4), 50);
+    }
+    
+    @Test
+    public void testObtenerCircuitoDeMenorCosto() {
+    	assertEquals(terminal1.obtenerMejorCircuitoParaLaTerminalDestino(terminal4), circuito1);
+    }
+    
+    @Test
+    public void testObtenerCircuitoDeMenorTiempo() {
+    	terminal1.setEstrategia(new EstrategiaMenorTiempo());
+    	assertEquals(terminal1.obtenerMejorCircuitoParaLaTerminalDestino(terminal4), circuito2);
+    }
+    
+    @Test
+    public void testObtenerCircuitoDeMenorCantidadDeTramos() {
+    	terminal1.setEstrategia(new EstrategiaMenorCantidadDeTramos());
+    	assertEquals(terminal1.obtenerMejorCircuitoParaLaTerminalDestino(terminal4), circuito2);
+    }
+    
+    @Test
+    public void testInvalidoDeObtenerCircuitoDeMenorCosto() {
+    	assertThrows(Exception.class, () -> terminal1.obtenerMejorCircuitoParaLaTerminalDestino(terminal1));
+    }
+    
+    @Test
+    public void testInvalidoDeObtenerCircuitoDeMenorTiempo() {
+    	terminal1.setEstrategia(new EstrategiaMenorTiempo());
+    	assertThrows(Exception.class, () -> terminal1.obtenerMejorCircuitoParaLaTerminalDestino(terminal1));
+    }
+    
+    @Test
+    public void testInvalidoDeObtenerCircuitoDeMenorCantidadDeTramos() {
+    	terminal1.setEstrategia(new EstrategiaMenorCantidadDeTramos());
+    	assertThrows(Exception.class, () -> terminal1.obtenerMejorCircuitoParaLaTerminalDestino(terminal1));
+    }
+    
+    @Test
+    public void testObtenerProximaFechaDeSalidaConTerminalDestino() {
+    	assertEquals(terminal1.obtenerProximaFechaDeSalidaConTerminalDestino(terminal2), LocalDate.of(2023, 11, 13));
+    }
+    
+    @Test
+    public void testEnviarFacturaPorEmail() {
+    	terminal1.enviarFacturaPorEmail(buque1, terminal1);
+    }
+  
 }
