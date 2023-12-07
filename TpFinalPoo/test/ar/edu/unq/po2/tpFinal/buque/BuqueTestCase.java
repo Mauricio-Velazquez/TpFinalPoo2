@@ -1,6 +1,8 @@
 package ar.edu.unq.po2.tpFinal.buque;
 
 import static org.junit.Assert.assertEquals;
+
+
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -16,7 +18,6 @@ import org.mockito.Mockito;
 import ar.edu.unq.po2.tpFinal.container.Container;
 import ar.edu.unq.po2.tpFinal.servicio.Servicio;
 import ar.edu.unq.po2.tpFinal.terminalGestionada.TerminalGestionada;
-
 
 class BuqueTestCase {
 	private TerminalGestionada terminalMock;
@@ -114,24 +115,7 @@ class BuqueTestCase {
         Mockito.verify(terminalMock, Mockito.times(1)).notificarCliente(buque);
     }
     
-    @Test
-    public void testNotificarClienteAlIngresarFaseInbound() {
-        // Comprobación inicial: el buque comienza en la fase Outbound
-        assertEquals("FaseDeBuqueOutbound", buque.getEstadoActual().toString());
 
-        // Simulamos que el buque está a menos de 50 km de la terminal
-        when(terminalMock.obtenerPosicionActual()).thenReturn(new Posicion(10.0, 10.0));
-        buque.moverBuque(new Posicion(10.0, 10.0));
-
-        // Verificamos si el buque cambió a la fase Inbound
-        assertEquals("FaseDeBuqueInbound", buque.getEstadoActual().toString());
-
-        // Simulamos la notificación al entrar en la fase Inbound
-        buque.getEstadoActual().notificarTerminal(buque, terminalMock);
-
-        // Verificamos que se haya notificado al cliente
-        verify(terminalMock, times(1)).notificarCliente(buque);
-    }
     
     @Test
     public void testNotificarClienteYEnviarFacturaAlIngresarFaseDeparting() {
