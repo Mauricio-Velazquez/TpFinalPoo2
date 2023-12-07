@@ -38,4 +38,8 @@ public class Viaje {
 	public int getTiempoTotal() {
 		return circuito.getTiempoTotal();
 	}
+	
+	public boolean incluyeTerminalDestino(TerminalGestionada terminalDestino) {
+		return circuito.incluyeTerminalDestino(terminalDestino);
+	}
 }

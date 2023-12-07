@@ -363,8 +363,9 @@ public class TerminalGestionada {
 		int resultado = 0;
 		if(lineasNavieras.contains(naviera) && naviera.incluyeTerminalDestinoEnLosViajes(terminalDestino)) {
 			Viaje viaje = naviera.getViajes().stream()
-							     .min(Comparator.comparingInt(Viaje::getTiempoTotal))
-							     .orElseThrow(() -> new RuntimeException("No se encontró un viaje"));
+										 	 .filter(v -> v.incluyeTerminalDestino(terminalDestino))
+											 .min(Comparator.comparingInt(Viaje::getTiempoTotal))
+											 .orElseThrow(() -> new RuntimeException("No se encontró un viaje"));
 			resultado = viaje.getTiempoTotal();	
 		}
 		return resultado;
