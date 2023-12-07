@@ -179,10 +179,6 @@ public class TerminalGestionada {
     	return this.containers;
     }
     
-    public List<Orden> getOrdenes(){
-    	return this.ordenes;
-    }
-    
     public void posicionarTerminal(Posicion pos) {
     	gps.actualizarPosicion(pos);
     }
