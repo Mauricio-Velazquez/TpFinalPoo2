@@ -131,12 +131,32 @@ public class TerminalGestionada {
         camiones.add(camion);
     }
     
+    public List<Orden> getOrdenes(){
+    	return this.ordenes;
+    }
+    
+    public void setOrdenes(List<Orden> ordenes) {
+    	this.ordenes = ordenes;
+    }
+    
+    public List<Cliente> getClientes(){
+    	return this.clientes;
+    }
+    
+    public List<EmpresaTransportista> getEmpresas(){
+    	return this.empresas;
+    }
+    
     public void registrarChofer(Chofer chofer) {
         choferes.add(chofer);
     }
 
     public void registrarOrden(Orden orden) {
     	ordenes.add(orden);
+    }
+    
+    public List<Chofer> getChoferes(){
+    	return this.choferes;
     }
     
     public void registrarCliente(Cliente cliente) {

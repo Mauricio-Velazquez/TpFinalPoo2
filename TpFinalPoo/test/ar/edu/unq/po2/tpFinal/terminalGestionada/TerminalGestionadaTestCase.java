@@ -4,22 +4,26 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.anyString;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import ar.edu.unq.po2.tpFinal.buque.Buque;
 import ar.edu.unq.po2.tpFinal.buque.GPS;
 import ar.edu.unq.po2.tpFinal.buque.Posicion;
 import ar.edu.unq.po2.tpFinal.cliente.Cliente;
 import ar.edu.unq.po2.tpFinal.cliente.ClienteConsignee;
 import ar.edu.unq.po2.tpFinal.cliente.ClienteShipper;
+import ar.edu.unq.po2.tpFinal.container.Container;
 import ar.edu.unq.po2.tpFinal.container.ContainerDry;
 import ar.edu.unq.po2.tpFinal.container.ContainerTanque;
 import ar.edu.unq.po2.tpFinal.empresaTransportista.Camion;
@@ -130,6 +134,87 @@ public class TerminalGestionadaTestCase {
         terminal1.registrarLineaNaviera(naviera);
                         
     }
+    
+    @Test
+    public void testNotificarCliente() {
+        // Crear mocks de las dependencias necesarias
+        Buque buqueMock = mock(Buque.class);
+        Orden ordenMock = mock(Orden.class);
+        Cliente clienteMock = mock(Cliente.class);
+        TerminalGestionada terminal = new TerminalGestionada("TerminalTest", new EstrategiaMenorCantidadDeTramos());
+
+        // Configurar el comportamiento de las dependencias mock
+        when(ordenMock.getCliente()).thenReturn(clienteMock);
+
+        // Crear un mock separado para el viaje y configurarlo
+        Viaje viajeMock = mock(Viaje.class);
+        when(viajeMock.getBuque()).thenReturn(buqueMock);
+        when(ordenMock.getViaje()).thenReturn(viajeMock);
+
+        // Agregar la orden mock a la terminal
+        terminal.registrarOrden(ordenMock);
+
+        // Llamar al método a testear
+        terminal.notificarCliente(buqueMock);
+
+        // Verificar que se llame al método para enviar correo a consignee por cada orden asociada al buque
+        verify(clienteMock, times(1)).recibirEmail(anyString()); // Ajustar el número según la cantidad esperada
+    }
+    
+    
+    
+    @Test
+    public void testGenerarFacturaViajeYServicios() {
+        // Crear mocks de las dependencias necesarias
+        Buque buqueMock = mock(Buque.class);
+        Container containerMock1 = mock(Container.class);
+        Container containerMock2 = mock(Container.class);
+        Servicio servicioMock1 = mock(Servicio.class);
+        Servicio servicioMock2 = mock(Servicio.class);
+        
+        List<Container> containersMock = Arrays.asList(containerMock1, containerMock2);
+
+        // Configurar el comportamiento de los mocks
+        when(buqueMock.calcularMontoTotalServicios()).thenReturn(100.0);
+        when(buqueMock.getContainersAsociados()).thenReturn(containersMock);
+        when(containerMock1.getServiciosContratados()).thenReturn(Arrays.asList(servicioMock1));
+        when(containerMock2.getServiciosContratados()).thenReturn(Arrays.asList(servicioMock2));
+
+        TerminalGestionada terminal = new TerminalGestionada("TerminalTest", new EstrategiaMenorCantidadDeTramos());
+
+        // Llamar al método a testear
+        String factura = terminal.generarFacturaViajeYServicios(buqueMock, "ResponsablePago");
+
+        // Verificar el resultado esperado o alguna condición sobre la factura generada
+        assertNotNull(factura);
+
+        // Verificar interacciones o comportamientos específicos si es necesario
+        verify(buqueMock, times(1)).calcularMontoTotalServicios();
+        verify(buqueMock, times(1)).getContainersAsociados();
+        verify(containerMock1, times(1)).getServiciosContratados();
+        verify(containerMock2, times(1)).getServiciosContratados();
+    }
+    
+   
+
+
+
+
+    
+    @Test
+    public void testConsultarInicioDeTrabajo() {
+      
+        // Verificar que el inicio de trabajo devuelve true
+        assertTrue(terminal1.consultarInicioDeTrabajo());
+    }
+    
+    @Test
+    public void testHabilitarPartida() {
+        Buque buque = new Buque(1, terminal1);
+
+        // Verificar que la partida se habilita correctamente
+        assertTrue(terminal1.habilitarPartida(buque));
+    }
         
     @Test 
     public void testVerificarOrdenDeExportacionCargadaCorrectamente(){
@@ -140,6 +225,7 @@ public class TerminalGestionadaTestCase {
 		assertTrue(cliente1.getTurnos().stream().anyMatch(turno -> turno.getFechaYHora().equals(LocalDateTime.of(2023, 11, 13, 9, 0))));
 	}
     
+
     @Test
     public void testVerificarCondicionesDeIngresoDeUnShipperEnLaHoraAsignada() {
         terminal1.exportarA(terminal3, camion1, chofer1, container1, cliente1);
@@ -216,24 +302,22 @@ public class TerminalGestionadaTestCase {
     
     @Test
     public void testRegistroMetodos() {
-        // Crear el mock de TerminalGestionada y los mocks de las clases asociadas
-        TerminalGestionada terminalMock = mock(TerminalGestionada.class);
         Chofer choferMock = mock(Chofer.class);
         Orden ordenMock = mock(Orden.class);
         Cliente clienteMock = mock(Cliente.class);
         EmpresaTransportista empresaMock = mock(EmpresaTransportista.class);
 
         // Llamar a los métodos de registro de la terminal con los mocks
-        terminalMock.registrarChofer(choferMock);
-        terminalMock.registrarOrden(ordenMock);
-        terminalMock.registrarCliente(clienteMock);
-        terminalMock.registrarEmpresaTransportista(empresaMock);
+        terminal1.registrarChofer(choferMock);
+        terminal1.registrarOrden(ordenMock);
+        terminal1.registrarCliente(clienteMock);
+        terminal1.registrarEmpresaTransportista(empresaMock);
 
         // Verificar si los métodos de adición de la terminal se llamaron con los mocks esperados
-        verify(terminalMock).registrarChofer(choferMock);
-        verify(terminalMock).registrarOrden(ordenMock);
-        verify(terminalMock).registrarCliente(clienteMock);
-        verify(terminalMock).registrarEmpresaTransportista(empresaMock);
+        assertTrue(terminal1.getChoferes().contains(choferMock));
+        assertTrue(terminal1.getOrdenes().contains(ordenMock));
+        assertTrue(terminal1.getClientes().contains(clienteMock));
+        assertTrue(terminal1.getEmpresas().contains(empresaMock));
     }
     
     @Test
@@ -246,15 +330,24 @@ public class TerminalGestionadaTestCase {
         terminal.setGPS(gpsMock); // Suponiendo que existe un método para configurar el GPS
 
         // Simulación de comportamiento del método obtenerPosicionActual()
-        when(gpsMock.obtenerPosicionActual()).thenReturn(new Posicion(10.0, 10.0));
+        Posicion posicionMock = new Posicion(10.0, 10.0);
+        when(gpsMock.obtenerPosicionActual()).thenReturn(posicionMock);
 
         // Llamada al método que se está testeando
-        Posicion posicion = terminal.obtenerPosicionActual();
+        Posicion nuevaPosicion = new Posicion(10.0, 10.0); // Nueva posición para actualizar
+        terminal.posicionarTerminal(nuevaPosicion);
 
-        // Verificación de que el método utiliza el GPS correctamente
-        assertNotNull(posicion); // Verificar que se devuelve una posición
-        assertEquals("Terminal",terminal.getNombre());
+        // Verificación de que el método utiliza el GPS correctamente y actualiza la posición
+        Posicion posicionActual = terminal.obtenerPosicionActual();
+        assertNotNull(posicionActual); // Verificar que se devuelve una posición
+
+        // Verificar que la posición se actualizó correctamente
+        assertEquals(nuevaPosicion.getLatitud(), posicionActual.getLatitud(), 0.0); // Comparación de la latitud
+        assertEquals(nuevaPosicion.getLongitud(), posicionActual.getLongitud(), 0.0); // Comparación de la longitud
+
+        assertEquals("Terminal", terminal.getNombre());
     }
+
     
     @Test
     public void testRegistrarCamion() {
