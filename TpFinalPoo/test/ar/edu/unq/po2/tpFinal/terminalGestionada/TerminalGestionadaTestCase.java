@@ -31,6 +31,7 @@ import ar.edu.unq.po2.tpFinal.naviera.EstrategiaMenorCosto;
 import ar.edu.unq.po2.tpFinal.naviera.Naviera;
 import ar.edu.unq.po2.tpFinal.naviera.Tramo;
 import ar.edu.unq.po2.tpFinal.orden.Orden;
+import ar.edu.unq.po2.tpFinal.servicio.Servicio;
 
 public class TerminalGestionadaTestCase {
 	private TerminalGestionada terminal1;
@@ -110,7 +111,14 @@ public class TerminalGestionadaTestCase {
 		
         viaje1 = new Viaje(LocalDate.of(2023, 11, 13), buque1, circuito1);
         viaje2 = new Viaje(LocalDate.of(2023, 11, 15), buque2, circuito2);
-        viaje3 = new Viaje(LocalDate.of(2023, 12, 24), buque3, circuito3);
+        //viaje3 = new Viaje(LocalDate.of(2023, 12, 24), buque3, circuito3);
+        
+        viaje3 = mock(Viaje.class);
+        when(viaje3.getBuque()).thenReturn(buque3);
+        when(viaje3.getCircuito()).thenReturn(circuito3);
+        when(viaje3.getFechaSalida()).thenReturn(LocalDate.of(2023, 12, 24));
+        when(viaje3.getFechaLlegada()).thenReturn(LocalDate.of(2023, 12, 28));
+        
         
         naviera.agregarBuque(buque1);
         naviera.agregarBuque(buque2);
@@ -133,45 +141,77 @@ public class TerminalGestionadaTestCase {
 	}
     
     @Test
-    public void testVerificarCondicionesDeIngresoDeUnShipper() {
+    public void testVerificarCondicionesDeIngresoDeUnShipperEnLaHoraAsignada() {
         terminal1.exportarA(terminal3, camion1, chofer1, container1, cliente1);
 		reloj = mock(Reloj.class);
 		when(reloj.getHora()).thenReturn(11);
 		
     	assertTrue(terminal1.verificarCondicionesDeIngresoDelShipper(cliente1, camion1, chofer1, reloj, 1));
-    }
-    
-    @Test 
-    public void testVerificarSiElShipperLlegoEnLaHoraAsignada(){
-        terminal1.exportarA(terminal3, camion1, chofer1, container1, cliente1);
-		reloj = mock(Reloj.class);
-		when(reloj.getHora()).thenReturn(11);
-		
     	assertTrue(terminal1.verificarSiLlegoEnHorarioElShipper(cliente1, 1, reloj));
-	}
-    
+    }
+  
     @Test 
     public void testElShipperNoLlegoEnLaHoraAsignada(){
         terminal1.exportarA(terminal3, camion1, chofer1, container1, cliente1);
 		reloj = mock(Reloj.class);
 		when(reloj.getHora()).thenReturn(14);
 		
+    	assertFalse(terminal1.verificarCondicionesDeIngresoDelShipper(cliente1, camion1, chofer1, reloj, 1));
     	assertFalse(terminal1.verificarSiLlegoEnHorarioElShipper(cliente1, 1, reloj));
+	}
+    
+    @Test 
+    public void testElChoferDelShipperNoCoincideConElRegistrado(){
+        terminal1.exportarA(terminal3, camion1, chofer1, container1, cliente1);
+		reloj = mock(Reloj.class);
+		when(reloj.getHora()).thenReturn(11);
+		
+    	assertFalse(terminal1.verificarCondicionesDeIngresoDelShipper(cliente1, camion1, chofer2, reloj, 1));
+	}
+    
+    @Test 
+    public void testElCamionDelShipperNoCoincideConElRegistrado(){
+        terminal1.exportarA(terminal3, camion1, chofer1, container1, cliente1);
+		reloj = mock(Reloj.class);
+		when(reloj.getHora()).thenReturn(11);
+		
+    	assertFalse(terminal1.verificarCondicionesDeIngresoDelShipper(cliente1, camion2, chofer1, reloj, 1));
 	}
     
     @Test 
     public void testVerificarOrdenDeImportacionCargadaCorrectamente(){
         terminal1.importar(camion2, chofer2, container2, cliente2, viaje3);
 		assertEquals(terminal1.cantidadDeOrdenes(), 1);
+		assertEquals(cliente2.getOrdenes().size(), 1);
 	}
     
     @Test
     public void testVerificarCondicionesDeIngresoDeUnConsignee() {
-    	terminal1.importar(camion2, chofer2, container1, cliente2, viaje3);
+    	terminal1.importar(camion2, chofer2, container2, cliente2, viaje3);
 		reloj = mock(Reloj.class);
 		when(reloj.getFechaYHora()).thenReturn(LocalDateTime.of(2023, 12, 24, 16, 00));
 		
 		assertTrue(terminal1.verificarCondicionesDeIngresoDelConsignee(cliente2, camion2, chofer2, reloj, 1));
+		assertEquals(terminal1.getContainers().size(), 0);
+		assertEquals(camion2.getContainerCargado(), container2);
+    }
+    
+    @Test
+    public void testVerificarCondicionesDeIngresoDeUnConsigneeQueLlegoTresDiasTarde() {
+    	terminal1.importar(camion2, chofer2, container2, cliente2, viaje3);
+		reloj = mock(Reloj.class);
+		when(reloj.getFecha()).thenReturn(LocalDate.of(2023, 12, 31));
+		when(reloj.getFechaYHora()).thenReturn(LocalDateTime.of(2023, 12, 31, 16, 00));
+		
+		assertTrue(terminal1.verificarCondicionesDeIngresoDelConsignee(cliente2, camion2, chofer2, reloj, 1));		
+		Servicio servicio = terminal1.getOrdenes()
+									 .stream()
+									 .filter(o -> o.getNroOrden() == 1)
+									 .findFirst()
+									 .get()
+									 .getServicios()
+									 .getFirst();
+		assertEquals(servicio.getCosto(), 600, 0.000);
     }
     
     @Test

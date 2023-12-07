@@ -124,7 +124,7 @@ public class TerminalGestionada {
     }
     
     public void setGPS(GPS gps) {
-    	this.gps =gps;
+    	this.gps = gps;
     }
     
     public void registrarCamion(Camion camion) {
@@ -153,6 +153,14 @@ public class TerminalGestionada {
     
     public List<Camion> getCamiones(){
     	return this.camiones;
+    }
+    
+    public List<Container> getContainers(){
+    	return this.containers;
+    }
+    
+    public List<Orden> getOrdenes(){
+    	return this.ordenes;
     }
     
     public void posicionarTerminal(Posicion pos) {
@@ -231,7 +239,7 @@ public class TerminalGestionada {
 		LocalDateTime fechaLlegadaConHora = fechaLlegada.atTime(11, 00);
 		LocalDateTime fechaLimiteRetiroConHora = fechaLlegadaConHora.plusDays(1);
 
-        String mensaje = "Su carga llegará el " + fechaLlegadaConHora + ". Tiene hasta el " + fechaLimiteRetiroConHora + " para retirarla o se le cobrara un extra.";
+        String mensaje = "Su carga llegará el " + fechaLlegadaConHora + ". Tiene hasta el " + fechaLimiteRetiroConHora + " para retirarla sin costo sino se le cobrara un extra.";
 
         enviarCorreoConsignee(cliente, mensaje);
     }
@@ -299,6 +307,7 @@ public class TerminalGestionada {
     						 .findFirst()
     						 .orElseThrow(() -> new RuntimeException("No se encontró una orden con el nroOrden dado."));
     	Container container = orden.getContainer();
+    	containers.add(container); // Para representar que el container está en la terminal.
     	
     	if(this.verificarSiLlegoEnHorarioElConsignee(cliente, orden, reloj) && this.verificarCamion(camion) && this.verificarChofer(chofer)) {
     		camion.cargarContainer(container);
