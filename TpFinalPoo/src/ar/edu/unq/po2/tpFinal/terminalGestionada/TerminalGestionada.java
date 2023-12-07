@@ -103,8 +103,7 @@ public class TerminalGestionada {
 
     public void enviarFacturaPorEmail(Buque buque, TerminalGestionada terminal) {
     
-    	List<Orden> ordenesBuscadas = ordenes.stream()
-                .filter(orden -> orden.getViaje().getBuque().equals(buque)).toList();
+    	List<Orden> ordenesBuscadas = obtenerOrdenesEsperandoBuque(buque);
     	
     	// Recorrer cada orden buscada y enviar la factura al cliente asociado
         ordenesBuscadas.forEach(orden -> {
